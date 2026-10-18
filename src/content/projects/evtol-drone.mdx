@@ -1,0 +1,134 @@
+---
+title: "eVTOL tail-sitter drone for anti-poaching patrol"
+slug: evtol-drone
+summary: "Five-person team built a 3D-printed Eclipson tail-sitter eVTOL for wildlife-reserve patrols. Scripted autonomous patrol logic in Lua on ArduPilot (simulation-tested), then diagnosed two failed take-offs to drive design improvements."
+metrics:
+  - value: "£10.50"
+    label: "Total filament cost"
+    source: "Filament cost £10.50; bill of materials compiled for all components (Table I) — source: 03-evtol-drone.md, Methodology section 2"
+  - value: "£1.80"
+    label: "Cost per wing reprint"
+    source: "glued parts meant one break required reprinting a whole wing (£1.80 per wing) — source: 03-evtol-drone.md, Results section"
+  - value: "2–3×"
+    label: "Flight-time advantage of eVTOL vs quadcopter"
+    source: "Fixed-wing eVTOLs combine vertical take-off with long-range, low-noise, efficient cruise, often 2–3× the flight time of a quadcopter — source: 03-evtol-drone.md, Context section"
+tags:
+  - ArduPilot
+  - Lua
+  - 3D printing
+  - Control systems
+  - Electronics & power
+date: "TODO"
+institution: Durham University
+category: Engineering
+type: Group project
+visibility: Fully public
+team:
+  - Henry Allen
+  - Nicholas Mommsen
+  - George Lythgoe
+  - Frederick Bicknell
+  - Jack Pitman
+cover: "/portfolio-page/figures/evtol-drone/fig-assembly.jpg"
+figures:
+  - src: "/portfolio-page/figures/evtol-drone/fig-assembly.jpg"
+    caption: "The completed Eclipson tail-sitter eVTOL, assembled from 3D-printed parts. Total filament cost: £10.50."
+  - src: "/portfolio-page/figures/evtol-drone/fig-hardware.jpg"
+    caption: "Avionics installed in the fuselage: Holybro Pixhawk 6C Mini flight controller, LiPo battery, ESCs and GPS module."
+  - src: "/portfolio-page/figures/evtol-drone/fig-wing-damage.jpg"
+    caption: "Wing damage after Flight 2. Taking off from a metal plate, the drone flipped backwards and sideways on throttle-up, breaking the wings beyond repair."
+  - src: "/portfolio-page/figures/evtol-drone/fig-simulation.png"
+    caption: "Mission Planner simulation of the autonomous patrol script: lawnmower-pattern passes between four GPS waypoints above Kruger National Park, then return to home."
+---
+
+## Executive summary
+
+The aim was an easy-to-launch, efficient, low-noise, long-range aerial platform for surveying conservation areas with minimal user input. Our five-person team built a 3D-printed Eclipson fixed-wing eVTOL in a tail-sitter configuration, which takes off vertically and cruises as a fixed-wing aircraft. We set it up on ArduPilot with Mission Planner and wrote Lua scripts for an autonomous patrol mission, tested in simulation.
+
+Structural limitations stopped the drone reaching fixed-wing cruise. Weakness between the wings and fuselage made it hard to land without significant damage, and reprinting a whole wing caused long delays. In testing, we also hit hardware, GPS calibration and electromagnetic interference issues. The report closes with recommendations to improve the drone's strength, feasibility and performance.
+
+## Context
+
+Traditional reserve monitoring (ranger patrols, helicopters) is expensive, slow and limited in coverage. Quadcopters have short flight times and range. Fixed-wing eVTOLs combine vertical take-off with long-range, low-noise, efficient cruise, often 2–3× the flight time of a quadcopter.
+
+## My role
+
+TODO (team of 5; the report doesn't say who did what).
+
+## Methodology
+
+**1. Business case.** Set out the problem for conservation teams and the advantages of eVTOLs over quadcopters and fixed-wing aircraft. Also covered other uses: river water sampling, package delivery, powerline inspection.
+
+**2. Airframe build**
+- 3D-printed parts assembled with cyanoacrylate glue, following Eclipson's instructions
+- Carbon rods in the fuselage and vertical stabiliser
+- Elevons driven by servos
+- Filament cost £10.50; bill of materials compiled for all components (Table I)
+
+**3. Hardware integration**
+- Holybro Pixhawk 6C Mini flight controller
+- Power distribution board fed through a splitter from the LiPo battery
+- Two ESCs taking PWM throttle signals
+- Buck converter powering the servo rail
+- GPS over UART, telemetry radio and RC receiver
+
+**4. Ground control.** Mission Planner on ArduPilot, with patrol routes programmed as GPS waypoints.
+
+**5. Flight testing**
+- Ground checks in manual mode (flaps, trim, RC inputs) with full logging enabled
+- Two flight attempts, then crash analysis from footage and logs
+
+**6. Proposed testing** (planned but not reached):
+- **Hover tuning:** FFT vibration analysis to set notch filters, then Quik Tune and AutoTune
+- **Transition testing:** time and altitude change
+- **Efficiency testing:** hover-only vs transition flights on a full battery, to test Eclipson's claim of triple the distance
+- **Repeatability testing:** RMS error of flight paths against the programmed route
+
+**7. Lua scripting** (Mission Planner simulation, ArduPlane with Q_ENABLE)
+- Automated pre-arm checks, then arming and take-off to a set altitude
+- Hover-to-FBWA transition, with tail-sit angle and angular rates tuned by experiment
+- Lawnmower-style passes between four waypoints in Kruger National Park, with a loop counter, then return to home
+- Noted limitation: simulation used pre-tuned PIDs, so real flight would need a quick-tune script
+
+**8. Critical review.** Reviewed the structure, the hardware set-up and the build process, considered alternative eVTOL configurations, and made recommendations.
+
+## Results
+
+- **Flight 1:** the wire feet got stuck in grass and moss, and the drone pivoted over (undamaged)
+- **Flight 2:** taking off from a metal plate, the drone flipped backwards and sideways on throttle-up, damaging the wings beyond repair. The logs didn't capture desired pitch, so that couldn't be ruled out as the cause.
+- **Design flaws identified:**
+  - Wing–fuselage joint glued with minimal overlap and no spar
+  - Single-wall-loop prints
+  - Thin landing legs
+  - The supplied hardware differed from the design: a separate flight controller and power board, which made level mounting difficult, and a larger battery, which affected weight distribution
+  - High-current wires close to the flight controller and GPS, likely causing accelerometer calibration errors
+- **Process issues:**
+  - Glued parts meant one break required reprinting a whole wing (£1.80 per wing)
+  - Limited printer access
+  - First-layer adhesion problems
+  - The airstrip was a 20-minute drive away
+  - Weather grounded the drone on several days
+- **Recommendations:**
+  - Carbon-fibre composites and rods through the wing–fuselage joint
+  - A modular airframe
+  - More rigid legs
+  - LiDAR, optical flow and redundant barometric sensors, plus imaging
+  - Smart battery management
+  - For a complete redesign, a conventional VTOL with multi-rotor lift and a dedicated cruise motor
+- **Future development:** live video via a VTX or digital link, and a Python/OpenCV program to detect poachers and alert authorities with their location
+
+## Transferable skills
+
+| Skill | How it shows up here | Where it transfers |
+|---|---|---|
+| Business case | Defined the user problem, the alternatives and other applications for eVTOL drones | Consulting, commercial assessment |
+| Critical review and failure analysis | Identified the structural, hardware and process causes behind the failed tests | Post-mortems, operational due diligence |
+| Systems integration | Connected the power, control, sensor and communication hardware | Understanding complex products (aerospace and defence) |
+| Scripting (Lua) | Autonomous mission logic tested in simulation | Automation, coding |
+| Test planning | Proposed tests with defined metrics (RMS path error, range comparison) | Designing analyses with measurable criteria |
+| Cost awareness | Bill of materials and per-wing reprint cost | Cost modelling |
+| Teamwork under time constraints | Five-person build working against strict time limits | Deal and project teams |
+
+## Credits
+
+Team: Henry Allen, Nicholas Mommsen, George Lythgoe, Frederick Bicknell, Jack Pitman.

@@ -1,0 +1,123 @@
+---
+title: "Passive cooling coatings for EV battery packs"
+slug: battery-cooling
+summary: "MATLAB simulation of a moisture-releasing coating (MOF-801) on air-cooled EV battery cells. At pack scale, peak temperature rise fell 30.5% and cell-to-cell spread fell 43.2% with no extra energy."
+metrics:
+  - value: "30.5%"
+    label: "Peak temperature rise reduction"
+    source: "Peak temperature rise cut by 30.5% (7.4 °C) — source: 01-battery-cooling.md, Results section"
+  - value: "43.2%"
+    label: "Cell-to-cell spread reduction"
+    source: "Temperature spread between cells cut by 43.2% (4.1 °C) — source: 01-battery-cooling.md, Results section"
+  - value: "1.7×"
+    label: "More heat removed by rear cells"
+    source: "Coatings on the hottest cells remove up to 1.7× more heat than those at the front — source: 01-battery-cooling.md, Executive summary"
+tags:
+  - MATLAB
+  - Finite volume method
+  - Heat transfer
+  - Battery modelling
+  - Numerical methods
+date: 2026-04
+institution: Durham University
+category: Engineering
+type: Dissertation / Research
+visibility: Summary only
+cover: "/portfolio-page/figures/battery-cooling/fig-coated-vs-uncoated.png"
+figures:
+  - src: "/portfolio-page/figures/battery-cooling/fig-coated-vs-uncoated.png"
+    caption: "Cell surface temperature: uncoated vs MOF-801 coated cell during fast charging (I = 5.2 A). Peak temperature reduced by 30.5%."
+  - src: "/portfolio-page/figures/battery-cooling/fig-pack-temperatures.png"
+    caption: "Cell surface temperatures at positions 1, 5, 10 and 15 in the 15-cell string. The coating narrows the spread between cells by 43.2%."
+  - src: "/portfolio-page/figures/battery-cooling/fig-heat-removed.png"
+    caption: "Cumulative heat extracted by the MOF-801 coating at each cell position. Cell 15 removes 1.7× as much heat as Cell 1."
+  - src: "/portfolio-page/figures/battery-cooling/fig-sensitivity.png"
+    caption: "Peak temperature reduction [%] per cell at varying airflow speeds. Above 1 m/s the coating's insulating effect dominates and performance turns negative."
+---
+
+## Executive summary
+
+Air cooling is the cheapest way to keep an electric-vehicle battery pack cool, but it has a flaw. The air warms up as it passes each cell, so cells at the far end run hotter than those at the front. This research project tested whether a thin coating on each cell could fix that without using any extra energy.
+
+The coating (a porous material called MOF-801) holds water from the air. When a cell heats up, the coating releases that water, which carries heat away, much like sweat cooling skin. When the cell cools, the coating soaks the water back up, ready for the next cycle.
+
+I built a MATLAB simulation of a coated battery cell, checked it against lab measurements (average error under 1 °C), and scaled it up to a row of 15 air-cooled cells.
+
+**Headline results** (fast-charging case):
+- Peak temperature rise cut by **30.5%** (7.4 °C)
+- Temperature spread between cells cut by **43.2%** (4.1 °C)
+- Trade-off: cells take **68.7%** longer to cool back to room temperature
+
+**Key insight:** the cells help each other through the shared airflow. Coatings on the hottest cells, at the back of the row, release more water and remove up to **1.7×** more heat than those at the front, which evens out the temperatures. The study also identified when the coating stops helping: above about 1 m/s airflow, and in very dry air.
+
+## Context
+
+Battery cells need to stay between 25 and 40 °C, with less than 5 °C between cells. Excess heat causes degradation, a shorter lifespan and, in extreme cases, thermal runaway. Redesigning the airflow channels helps, but only by making the pack bigger or adding inlets, which means more airflow and more energy. Coatings like this had shown early promise, but their behaviour at pack scale had not been characterised.
+
+## My role
+
+Individual BEng research project, supervised by Dr Zhiwei Ma. I did the literature review, built and coded the model, validated it, ran the parameter and sensitivity studies, and wrote the paper.
+
+## Methodology
+
+**1. Electrical model of the cell**
+- Represented the battery as a simple equivalent circuit (a resistor plus a resistor–capacitor pair) to predict voltage and heat output as it charges
+- Tracked state of charge by integrating current over time
+- Made the resistances temperature-dependent with exponential (Arrhenius) relationships
+- Computed heat generated from electrical losses plus the cell's internal chemical reactions
+
+**2. Heat flow inside the cell**
+- Solved the transient heat-conduction PDE in cylindrical coordinates, radially from the cell's core out through its steel casing and the coating
+- Discretised with the **finite-volume method** across three layers: heat-generating core, casing, coating
+- **Implicit time integration** (θ = 1.0) with a 0.05 s time step
+
+**3. How the coating absorbs and releases water**
+- **How much water it can hold:** an established empirical equation from the literature for how much water the coating holds at a given temperature and humidity. This equation also gives the heat absorbed or released per gram of water.
+- **How fast it responds:** a first-order rate equation, where uptake moves towards its equilibrium value at a speed that rises exponentially with temperature
+- **Coupling:** water released by the coating becomes a heat sink in the coating layer of the heat-conduction model
+
+**4. Pack and airflow model**
+- Split the airstream into one control volume per cell, each tracking air temperature and humidity
+- Air temperature rise past each cell computed with the **NTU (number of transfer units) method**
+- A mass balance carried the water each coating releases or absorbs downstream, so every cell affects the cells behind it
+- Heat-transfer coefficients from standard empirical correlations for forced and natural convection
+
+**5. Boundary conditions**
+- Neumann (zero heat flux) at the cell centre, by symmetry
+- Robin at the outer surface: heat conducted out equals heat convected away
+- Dirichlet at the air inlet: room temperature and humidity
+
+**6. Validation**
+- Compared predictions with lab surface-temperature data for a commercial cell, coated and uncoated, at three charging and three discharging rates
+- Error metrics: RMSE, weighted RMSE, mean absolute error, maximum error and peak error
+
+**7. Analysis**
+- Parameter sweeps of airflow speed
+- **One-at-a-time sensitivity analysis** across room temperature, humidity and airflow speed
+
+## Results
+
+- **Single cell:** the coating cut peak temperature by up to 9.6 °C when overcharging, and by about 4 °C during normal fast charging
+- **Pack:** 30.5% lower peak temperature rise and 43.2% smaller spread between cells, compared with an uncoated, air-cooled pack
+- **Why it works:** air warms as it moves along the row, so coatings on the back cells release more water. The cell at the back removed 1.7× as much heat as the cell at the front.
+- **Limits:**
+  - Above 1 m/s airflow, the coating's insulating effect outweighs its cooling
+  - At very slow airflow (0.05 m/s), the air becomes saturated with water and can't take any more
+  - Below ~35% humidity, the coating holds too little water to start with
+- **Headroom:** the coating used only about 11% of its theoretical cooling capacity, so it could handle much larger heat loads
+
+## Transferable skills
+
+| Skill | How it shows up here | Where it transfers |
+|---|---|---|
+| Building a model from first principles | Linked electrical, thermal, moisture and airflow sub-models into one MATLAB simulation | Building financial and operating models with many interacting drivers |
+| Numerical methods | Finite-volume discretisation of a PDE, implicit time-stepping, coupled boundary conditions | Quant and risk modelling |
+| Validation against data | Checked against lab measurements with RMSE and other error metrics | Back-testing; judging whether a forecast can be trusted |
+| Sensitivity and scenario analysis | Parameter sweeps and one-at-a-time sensitivity on airflow, humidity and temperature | Sensitivity tables, bull/base/bear cases, stress testing |
+| Finding the trade-off | Weighed cooling benefit against slower recovery and identified where the coating stops helping | Investment recommendations that weigh upside against risk |
+| Research and synthesis | Reviewed air-cooling channel designs, liquid cooling and passive cooling to find the gap in existing work | Industry primers and equity research initiation work |
+| Technical writing | Wrote up the project as a research paper | Clear written research and reports |
+
+## Credits
+
+Individual research project, supervised by Dr Zhiwei Ma. Experimental validation data from Lukas Koehne-Mitchell's original study.

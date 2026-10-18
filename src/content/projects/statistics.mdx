@@ -1,0 +1,93 @@
+---
+title: "Probability & statistics for engineering data: regression, SCADA and Bayes"
+slug: statistics
+summary: "Three applied MATLAB problems: regression on concrete strength data, 95% confidence-interval analysis of wind-turbine SCADA power curves, and Bayesian MAP decision rules for a binary symmetric channel."
+metrics:
+  - value: "R² 0.78 / 0.41"
+    label: "Binder model: training / test R²"
+    source: "The binder regression model performed well (training R² 0.78, test R² 0.41 on transformed data) — source: 04-statistics.md, Executive summary"
+  - value: "205 vs 8.94 kWh/10 min"
+    label: "Widest 95% CI: dataset B vs dataset A"
+    source: "Dataset B's 95% confidence intervals were up to 205 kWh/10 min wide, against 8.94 for dataset A — source: 04-statistics.md, Executive summary"
+  - value: "−0.27"
+    label: "Cement model test R² (below baseline)"
+    source: "The cement model did not: its test R² of −0.27 meant predicting the mean would have done better — source: 04-statistics.md, Executive summary"
+tags:
+  - MATLAB
+  - Statistics & regression
+  - Bayesian inference
+date: "TODO"
+institution: "Durham University (ENGI2211)"
+category: Engineering
+type: Coursework
+visibility: Summary only
+cover: "/portfolio-page/figures/statistics/fig-ci-comparison.png"
+figures:
+  - src: "/portfolio-page/figures/statistics/fig-ci-comparison.png"
+    caption: "Binned mean energy output with 95% confidence intervals: Dataset A (normal operation) vs Dataset B. Dataset B's widest CI reaches 205 kWh/10 min against 8.94 for Dataset A — consistent with SCADA faults, turbine faults, or deliberate curtailment."
+  - src: "/portfolio-page/figures/statistics/fig-power-curve-a.png"
+    caption: "Power curve for Dataset A: energy output (kWh/10 min) vs wind speed for 5,000 readings. Cut-in speed ~2.5 m/s, rated output ~280 kWh/10 min."
+  - src: "/portfolio-page/figures/statistics/fig-residuals.png"
+    caption: "Residual KDE for the binder regression model. Training residuals (blue) tightly centred at zero; test residuals (dotted) are wider with a negative mean — systematic over-prediction."
+  - src: "/portfolio-page/figures/statistics/fig-posterior.png"
+    caption: "Posterior probabilities for the binary symmetric channel given received symbol A1, for correct-rate values q = 0.3, 0.5, 0.7. Intersections locate the MAP decision boundaries."
+---
+
+## Executive summary
+
+Three applied statistics problems in MATLAB:
+1. **Regression:** predicting the compressive strength of concrete at different curing times
+2. **Statistics:** analysing a wind turbine's power curve over two time periods from SCADA data
+3. **Bayes:** applying Bayes' theorem to a binary symmetric channel to decide which bit was most likely sent
+
+**Results:**
+- The binder regression model performed well (training R² 0.78, test R² 0.41 on transformed data). The cement model did not: its test R² of −0.27 meant predicting the mean would have done better.
+- Dataset B's 95% confidence intervals were up to 205 kWh/10 min wide, against 8.94 for dataset A. That pointed to SCADA or turbine faults, or turbulent conditions, with a second plateau suggesting deliberate curtailment.
+- Posterior probabilities were used to locate the MAP decision boundaries.
+
+## Context
+
+The report applies the ENGI2211 learning outcomes to three common engineering applications: concrete strength in civil engineering, wind-turbine behaviour, and the binary symmetric channel as the simplest communications model.
+
+## My role
+
+Individual coursework (ENGI2211, Durham).
+
+## Methodology
+
+**1. Regression: concrete dataset**
+- Split the data by curing age: ages with more than 50 samples for training (944 points), the rest for testing (86 points)
+- Took the natural log of compressive strength to linearise the data
+- Calculated water:binder and water:cement ratios
+- Fitted ln(strength) = b₀ + b₁ × ratio at each age, then regressed b₀ and b₁ against age to predict untrained ages
+- Evaluated with **residual KDE plots** (checking for systematic bias) and **R²** on transformed and raw data, for both training and test sets
+
+**2. Statistics: wind-turbine SCADA data, 2 × 5,000 points**
+- Plotted power curves for both periods and estimated rated output (~280 kWh/10 min) and cut-in speed (~2.5 m/s). The cut-out speed was given as 25 m/s.
+- Binned wind speed into 1 m/s bins and computed the mean, standard deviation and **95% confidence interval** for each bin
+- Compared the two periods and set out possible explanations: SCADA errors, turbine faults, erratic weather or curtailment
+
+**3. Bayesian analysis: binary symmetric channel**
+- Computed the probability of receiving a 0 or a 1 across prior probabilities (p) and correct rates (q)
+- Computed posterior probabilities with Bayes' theorem
+- Located the **MAP decision boundaries** where the posterior curves intersect
+
+## Results
+
+- **Binder vs cement model:** the binder model was accurate on both transformed and raw data; the cement model had negative test R². Test residuals had a negative mean in both cases, meaning a systematic bias towards over-prediction.
+- **Turbine data:** dataset A closely followed an ideal power curve. Dataset B showed many zero readings at rated speed, much wider confidence intervals (largest 205 vs 8.94 kWh/10 min) and a second plateau consistent with curtailment.
+- **Channel:** a higher correct rate q makes a MAP decision more likely to be right. At q = 0.5, the channel is pure noise.
+
+## Transferable skills
+
+| Skill | How it shows up here | Where it transfers |
+|---|---|---|
+| Regression and out-of-sample testing | A train/test split and R² showed one model generalised and the other didn't | Forecasting, back-testing |
+| Residual and bias diagnostics | Residual distributions revealed systematic over-prediction | Checking models for systematic error |
+| Quantifying uncertainty | Binned 95% confidence intervals compared two periods | Risk measurement |
+| Bayesian reasoning | Posterior probabilities and MAP decision rules | Decision-making under uncertainty |
+| Generating hypotheses | Set out competing explanations for the anomalous turbine data | Structured problem-solving |
+
+## Credits
+
+Individual coursework.

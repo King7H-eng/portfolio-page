@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+
+// Ordered as specified in CLAUDE.md
+const ORDER = [
+  'battery-cooling',
+  'ai-energy-utilities',
+  'evtol-drone',
+  'statistics',
+];
+
+const allProjects = await getCollection('projects');
+const projects = ORDER.map((slug) =>
+  allProjects.find((p) => p.data.slug === slug)
+).filter(Boolean);
+---
+
+<BaseLayout
+  title="Nicholas Mommsen — Engineering & Finance"
+  description="Portfolio of Nicholas Mommsen: BEng Mechanical Engineering (Durham), MSc Computational Methods (Imperial). Projects in battery thermal modelling, energy market research, autonomous drones and applied statistics."
+>
+  <SiteHeader />
+
+  <main id="main-content">
+    <section class="hero" aria-label="Introduction">
+      <div class="hero-inner">
+        <div class="hero-eyebrow mono">
+          <span class="dot" aria-hidden="true"></span>
+          BEng Durham · MSc Imperial College London
+        </div>
+        <h1 class="hero-name">Nicholas Mommsen</h1>
+        <p class="hero-tagline">
+          Engineering to finance — modelling, analysis, research.
+        </p>
+      </div>
+      <div class="hero-divider" aria-hidden="true"></div>
+    </section>
+
+    <section class="projects-section" aria-labelledby="projects-heading">
+      <div class="section-inner">
+        <h2 id="projects-heading" class="sr-only">Projects</h2>
+        <div class="projects-grid">
+          {projects.map((project, i) => (
+            project && (
+              <ProjectCard
+                title={project.data.title}
+                slug={project.data.slug}
+                summary={project.data.summary}
+                metrics={project.data.metrics}
+                tags={project.data.tags}
+                category={project.data.category}
+                type={project.data.type}
+                cover={project.data.cover}
+                index={i}
+              />
+            )
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="mono footer-name">NM</span>
+      <span class="footer-copy">
+        Nicholas Mommsen ·
+        <a
+          href="https://github.com/King7H-eng/portfolio-page"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Source on GitHub
+        </a>
+      </span>
+    </div>
+  </footer>
+</BaseLayout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    padding: var(--space-24) var(--gutter) var(--space-12);
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+
+  .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .hero-name {
+    font-size: clamp(var(--text-3xl), 6vw, var(--text-5xl));
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-tagline {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    max-width: 40ch;
+    line-height: 1.5;
+  }
+
+  .hero-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin-top: var(--space-12);
+  }
+
+  /* ---- Projects grid ---- */
+  .projects-section {
+    padding: var(--space-12) 0 var(--space-24);
+  }
+
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 700px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---- Footer ---- */
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-8) var(--gutter);
+  }
+
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .footer-name {
+    color: var(--color-accent);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  .footer-copy {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .footer-copy a {
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+  .footer-copy a:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+  }
+
+  /* ---- Utilities ---- */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+  }
+</style>
