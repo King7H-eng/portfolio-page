@@ -17,13 +17,6 @@
   --color-accent-dim:  #C07A10;
   --color-accent-bg:   #1A1000;
 
-  /* Light mode overrides */
-  --color-bg-light:      #F5F6F8;
-  --color-surface-light: #FFFFFF;
-  --color-border-light:  #DDE1E8;
-  --color-text-light:    #0D1117;
-  --color-text-muted-light: #5A6272;
-
   /* Type */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -65,22 +58,7 @@
   --radius-lg: 12px;
 }
 
-/* ============================================================
-   Light mode
-   ============================================================ */
-@media (prefers-color-scheme: light) {
-  :root {
-    --color-bg:          var(--color-bg-light);
-    --color-surface:     var(--color-surface-light);
-    --color-surface-alt: #F0F1F4;
-    --color-border:      var(--color-border-light);
-    --color-border-mid:  #C8CDD8;
-    --color-text:        var(--color-text-light);
-    --color-text-muted:  var(--color-text-muted-light);
-    --color-text-faint:  #9BA5B5;
-    --color-accent-bg:   #FDF3E3;
-  }
-}
+/* Light mode intentionally disabled — site is dark-only */
 
 /* ============================================================
    Reset & base
