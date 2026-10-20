@@ -16,8 +16,6 @@ const { data } = project;
 const { Content } = await render(project);
 
 const base = import.meta.env.BASE_URL;
-const backHref = base;
-
 const catKey = data.category.toLowerCase().replace(/[^a-z]/g, '');
 
 function formatDate(d?: string) {
@@ -45,7 +43,7 @@ const dateDisplay = formatDate(data.date);
     <!-- Back nav -->
     <nav class="back-bar" aria-label="Breadcrumb">
       <div class="back-inner">
-        <a href={backHref} class="back-link">
+        <a href={base} class="back-link">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -58,7 +56,7 @@ const dateDisplay = formatDate(data.date);
     <header class="project-header">
       <div class="header-inner">
 
-        <div class="project-meta" aria-label="Project metadata">
+        <div class="project-meta">
           <span class={`cat-badge mono cat-${catKey}`}>{data.category}</span>
           <span class="meta-dot" aria-hidden="true">·</span>
           <span class="meta-type">{data.type}</span>
@@ -77,15 +75,15 @@ const dateDisplay = formatDate(data.date);
         </div>
 
         <h1 class="project-title">{data.title}</h1>
-
         <p class="project-summary">{data.summary}</p>
 
         {data.team && data.team.length > 0 && (
           <div class="project-team">
-            <span class="team-label mono">Team</span>
-            <span class="team-names">{data.team.join(' · ')}</span>
+            <span class="team-label mono">Team —</span>
+            <span class="team-names mono">{data.team.join(' · ')}</span>
           </div>
         )}
+
       </div>
     </header>
 
@@ -130,20 +128,15 @@ const dateDisplay = formatDate(data.date);
 
         {data.figures && data.figures.length > 0 && (
           <section class="figures-section" aria-labelledby="figures-heading">
-            <h2 id="figures-heading" class="figures-heading">Figures</h2>
+            <h2 id="figures-heading" class="figures-heading mono">// Figures</h2>
             <div class="figures-grid">
               {data.figures.map((fig, i) => (
                 <figure class="fig-item">
                   <div class="fig-img-wrap">
-                    <img
-                      src={fig.src}
-                      alt={fig.caption}
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <img src={fig.src} alt={fig.caption} loading="lazy" decoding="async" />
                   </div>
                   <figcaption class="fig-caption">
-                    <span class="fig-num mono">Fig. {i + 1}</span>
+                    <span class="fig-num mono">Fig. {i + 1} —</span>
                     {fig.caption}
                   </figcaption>
                 </figure>
@@ -168,13 +161,11 @@ const dateDisplay = formatDate(data.date);
     const isFloat = raw.includes('.');
     const duration = 1200;
     const start = performance.now();
-
     function step(now: number) {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = target * eased;
-      const displayed = isFloat ? current.toFixed(1) : Math.round(current).toString();
-      el.textContent = raw.replace(match[0], displayed);
+      el.textContent = raw.replace(match[0], isFloat ? current.toFixed(1) : Math.round(current).toString());
       if (progress < 1) requestAnimationFrame(step);
       else el.textContent = raw;
     }
@@ -182,55 +173,40 @@ const dateDisplay = formatDate(data.date);
   }
 
   const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          animateCount(entry.target as HTMLElement);
-          observer.unobserve(entry.target);
-        }
-      });
-    },
+    (entries) => entries.forEach((e) => { if (e.isIntersecting) { animateCount(e.target as HTMLElement); observer.unobserve(e.target); } }),
     { threshold: 0.4 }
   );
-
-  document.querySelectorAll<HTMLElement>('.metric-value[data-target]')
-    .forEach((el) => observer.observe(el));
+  document.querySelectorAll<HTMLElement>('.metric-value[data-target]').forEach((el) => observer.observe(el));
 </script>
 
 <style>
-  /* ── Page shell ──────────────────────────────────────── */
-  .project-page {
-    min-height: 100dvh;
-  }
+  .project-page { min-height: 100dvh; }
 
-  /* ── Back nav ────────────────────────────────────────── */
+  /* ── Back nav ── */
   .back-bar {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border);
     padding: var(--space-3) 0;
   }
-
   .back-inner {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 var(--gutter);
   }
-
   .back-link {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
     font-size: var(--text-sm);
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     transition: color var(--transition-fast);
   }
-  .back-link:hover { color: var(--color-text); }
+  .back-link:hover { color: var(--text); }
 
-  /* ── Project header ──────────────────────────────────── */
+  /* ── Project header ── */
   .project-header {
     padding: var(--space-16) 0 var(--space-12);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border);
   }
-
   .header-inner {
     max-width: var(--max-width);
     margin: 0 auto;
@@ -248,34 +224,34 @@ const dateDisplay = formatDate(data.date);
 
   .cat-badge {
     font-size: 0.68rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.07em;
     text-transform: uppercase;
     padding: 2px 8px;
     border-radius: var(--radius-sm);
     border: 1px solid currentColor;
   }
-  .cat-engineering { color: var(--color-cat-engineering); background: rgba(129, 140, 248, 0.07); }
-  .cat-data        { color: var(--color-cat-data);        background: rgba(52, 211, 153, 0.07); }
-  .cat-finance     { color: var(--color-cat-finance);     background: rgba(251, 191, 36, 0.07); }
+  .cat-engineering { color: var(--cat-engineering); border-color: rgba(127,176,255,0.3); background: transparent; }
+  .cat-data        { color: var(--cat-data);        border-color: rgba(196,168,255,0.3); background: transparent; }
+  .cat-finance     { color: var(--cat-finance);     border-color: rgba(94,230,176,0.3);  background: transparent; }
 
-  .meta-dot  { color: var(--color-text-faint); }
-  .meta-type, .meta-inst { color: var(--color-text-muted); }
-  .meta-date { color: var(--color-text-muted); font-size: 0.72rem; }
+  .meta-dot  { color: var(--text-faint); }
+  .meta-type, .meta-inst { color: var(--text-muted); }
+  .meta-date { color: var(--text-muted); font-size: 0.72rem; }
 
   .project-title {
     font-size: clamp(var(--text-2xl), 4.5vw, 3.25rem);
     font-weight: 800;
     letter-spacing: -0.035em;
     line-height: 1.1;
-    color: var(--color-text);
+    color: var(--text);
     max-width: 22ch;
     margin-bottom: var(--space-6);
   }
 
   .project-summary {
     font-size: var(--text-base);
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     max-width: 65ch;
     line-height: 1.8;
     margin-bottom: var(--space-6);
@@ -284,40 +260,34 @@ const dateDisplay = formatDate(data.date);
   .project-team {
     display: flex;
     align-items: baseline;
-    gap: var(--space-3);
+    gap: var(--space-2);
     flex-wrap: wrap;
   }
-
   .team-label {
     font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-text-faint);
+    color: var(--text-faint);
   }
-
   .team-names {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    font-family: var(--font-mono);
     font-size: 0.78rem;
+    color: var(--text-muted);
   }
 
-  /* ── Metrics band ────────────────────────────────────── */
+  /* ── Metrics band ── */
   .metrics-band {
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-surface);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    backdrop-filter: blur(4px);
   }
-
   .metrics-inner {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: var(--space-8) var(--gutter);
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
   }
-
   .metric-item {
     position: relative;
     display: flex;
@@ -327,39 +297,35 @@ const dateDisplay = formatDate(data.date);
     flex: 1;
     min-width: 140px;
   }
-
   .metric-divider {
     position: absolute;
     right: var(--space-4);
     top: var(--space-4);
     bottom: var(--space-4);
     width: 1px;
-    background: var(--color-border);
+    background: var(--border);
   }
-
   .metric-value {
     font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--text);
     letter-spacing: -0.04em;
     line-height: 1;
   }
-
   .metric-label {
     font-size: 0.72rem;
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     line-height: 1.4;
     max-width: 16rem;
   }
 
-  /* ── Cover image ─────────────────────────────────────── */
+  /* ── Cover ── */
   .project-cover {
     position: relative;
     overflow: hidden;
     max-height: 420px;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border);
   }
-
   .project-cover img {
     width: 100%;
     height: 420px;
@@ -368,64 +334,51 @@ const dateDisplay = formatDate(data.date);
     display: block;
     filter: brightness(0.8) saturate(0.85);
   }
-
   .cover-fade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, var(--color-bg) 100%);
+    background: linear-gradient(to bottom, transparent 40%, var(--bg) 100%);
   }
 
-  /* ── Prose body ──────────────────────────────────────── */
+  /* ── Body ── */
   .project-body {
     padding: var(--space-16) 0 var(--space-24);
   }
-
   .project-body-inner {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 var(--gutter);
   }
+  .project-prose { max-width: var(--content-width); }
 
-  .project-prose {
-    max-width: var(--content-width);
-  }
-
-  /* ── Figures ─────────────────────────────────────────── */
+  /* ── Figures ── */
   .figures-section {
     margin-top: var(--space-16);
     padding-top: var(--space-12);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border);
   }
-
   .figures-heading {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    font-size: var(--text-xs);
+    letter-spacing: 0.1em;
+    color: var(--accent);
     text-transform: uppercase;
-    color: var(--color-text-faint);
     margin-bottom: var(--space-8);
   }
-
   .figures-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-6);
   }
-
   .fig-item {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    backdrop-filter: blur(2px);
   }
-
-  .fig-img-wrap {
-    overflow: hidden;
-    background: var(--color-surface-alt);
-  }
-
+  .fig-img-wrap { overflow: hidden; background: rgba(17,17,20,0.9); }
   .fig-img-wrap img {
     width: 100%;
     height: auto;
@@ -433,31 +386,26 @@ const dateDisplay = formatDate(data.date);
     transition: transform 0.4s ease;
   }
   .fig-item:hover .fig-img-wrap img { transform: scale(1.02); }
-
   .fig-caption {
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     line-height: 1.6;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border);
   }
-
   .fig-num {
-    color: var(--color-accent);
-    margin-right: var(--space-2);
-    font-size: 0.68rem;
+    color: var(--accent);
+    margin-right: var(--space-1);
   }
 
-  /* ── Responsive ──────────────────────────────────────── */
+  /* ── Responsive ── */
   @media (max-width: 700px) {
-    .figures-grid  { grid-template-columns: 1fr; }
-    .metrics-inner { gap: var(--space-4); }
-    .metric-item   { min-width: 120px; padding-right: var(--space-6); }
+    .figures-grid { grid-template-columns: 1fr; }
+    .metric-item  { min-width: 120px; padding-right: var(--space-6); }
     .project-cover img { height: 220px; }
   }
-
   @media (max-width: 480px) {
-    .metric-item   { flex: 0 0 100%; }
+    .metric-item    { flex: 0 0 100%; }
     .metric-divider { display: none; }
   }
 </style>

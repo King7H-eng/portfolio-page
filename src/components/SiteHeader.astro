@@ -4,7 +4,9 @@ const base = import.meta.env.BASE_URL;
 
 <header class="site-header" id="site-header">
   <div class="header-inner">
-    <a href={base} class="wordmark mono" aria-label="Nicholas Mommsen — home">NM</a>
+    <a href={base} class="wordmark mono" aria-label="Nicholas Mommsen — home">
+      NM<span class="wordmark-underscore" aria-hidden="true">_</span>
+    </a>
 
     <nav class="nav" aria-label="Site navigation">
       <a href="mailto:Nicholasmommsen@outlook.com" class="nav-link">Email</a>
@@ -20,11 +22,8 @@ const base = import.meta.env.BASE_URL;
         target="_blank"
         rel="noopener noreferrer"
       >GitHub</a>
-      <a href={`${base}cv.pdf`} class="nav-cta" target="_blank" rel="noopener noreferrer">
-        CV
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-          <path d="M2 8L8 2M8 2H4.5M8 2V5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <a href={`${base}cv.pdf`} class="nav-cta mono" target="_blank" rel="noopener noreferrer">
+        CV ↗
       </a>
     </nav>
   </div>
@@ -33,9 +32,9 @@ const base = import.meta.env.BASE_URL;
 <script>
   const header = document.getElementById('site-header');
   if (header) {
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 16);
-    }, { passive: true });
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 16);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   }
 </script>
 
@@ -49,10 +48,10 @@ const base = import.meta.env.BASE_URL;
   }
 
   .site-header.scrolled {
-    background: rgba(10, 10, 11, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom-color: var(--color-border);
+    background: rgba(10, 10, 11, 0.70);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
   }
 
   .header-inner {
@@ -69,10 +68,14 @@ const base = import.meta.env.BASE_URL;
     font-size: var(--text-sm);
     font-weight: 700;
     letter-spacing: 0.08em;
-    color: var(--color-text);
-    transition: color var(--transition-fast);
+    color: var(--text);
+    transition: opacity var(--transition-fast);
   }
-  .wordmark:hover { color: var(--color-accent); }
+  .wordmark:hover { opacity: 0.75; }
+
+  .wordmark-underscore {
+    color: var(--accent);
+  }
 
   .nav {
     display: flex;
@@ -82,26 +85,24 @@ const base = import.meta.env.BASE_URL;
 
   .nav-link {
     font-size: var(--text-sm);
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     transition: color var(--transition-fast);
   }
-  .nav-link:hover { color: var(--color-text); }
+  .nav-link:hover { color: var(--text); }
 
   .nav-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     font-weight: 500;
-    color: var(--color-accent);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    padding: 5px 12px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    border: 1px solid rgba(76, 141, 255, 0.3);
+    padding: 6px 14px;
     border-radius: var(--radius-md);
     transition: background var(--transition-fast), border-color var(--transition-fast);
   }
   .nav-cta:hover {
-    background: var(--color-accent-bg);
-    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(76, 141, 255, 0.08);
+    border-color: rgba(76, 141, 255, 0.5);
   }
 
   @media (max-width: 480px) {

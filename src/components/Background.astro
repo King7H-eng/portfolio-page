@@ -1,0 +1,112 @@
+---
+// Blueprint background — position once in BaseLayout behind all content.
+// All layers: pointer-events none, aria-hidden, z-index < content.
+---
+
+<div class="bg-root" aria-hidden="true">
+
+  <!-- Layer 1: Hero grid (top ~760px, radial-masked) -->
+  <div class="bg-grid"></div>
+
+  <!-- Layer 2: Gradient glows -->
+  <div class="bg-glow bg-glow--main"></div>
+  <div class="bg-glow bg-glow--secondary"></div>
+  <div class="bg-glow bg-glow--lower"></div>
+
+  <!-- Layer 3: Film grain (fixed, full-viewport SVG) -->
+  <svg class="bg-grain" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)"/>
+  </svg>
+
+</div>
+
+<style>
+  /* Root wrapper — sits behind everything */
+  .bg-root {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  /* ── Layer 1: Hero grid ──────────────────────────────── */
+  .bg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 760px;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 65% 70% at 50% 35%, #000 25%, transparent 75%);
+    mask-image: radial-gradient(ellipse 65% 70% at 50% 35%, #000 25%, transparent 75%);
+  }
+
+  /* ── Layer 2: Glows ──────────────────────────────────── */
+  .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* Main glow: centred, top */
+  .bg-glow--main {
+    width: 760px;
+    height: 760px;
+    top: -260px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(76, 141, 255, 0.30) 0%, transparent 65%);
+    filter: blur(30px);
+  }
+
+  /* Secondary glow: right, upper */
+  .bg-glow--secondary {
+    width: 520px;
+    height: 520px;
+    top: 120px;
+    right: -140px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.16) 0%, transparent 65%);
+    filter: blur(30px);
+  }
+
+  /* Lower glow: left, behind projects section */
+  .bg-glow--lower {
+    width: 700px;
+    height: 600px;
+    top: 760px;
+    left: -200px;
+    background: radial-gradient(circle, rgba(76, 141, 255, 0.12) 0%, transparent 65%);
+    filter: blur(30px);
+  }
+
+  /* ── Layer 3: Film grain (fixed) ─────────────────────── */
+  .bg-grain {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Shrink glows on mobile */
+  @media (max-width: 700px) {
+    .bg-glow--main      { width: 400px; height: 400px; }
+    .bg-glow--secondary { width: 280px; height: 280px; right: -80px; }
+    .bg-glow--lower     { width: 400px; height: 320px; }
+    .bg-grid            { height: 480px; }
+  }
+
+  /* Respect reduced-motion: remove blur-based animations but keep static glows */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-glow { filter: none; opacity: 0.5; }
+  }
+</style>

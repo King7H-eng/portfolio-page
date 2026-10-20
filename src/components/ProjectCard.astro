@@ -15,7 +15,6 @@ const { title, slug, summary, metrics, tags, category, type, cover, index } = As
 const base = import.meta.env.BASE_URL;
 const href = `${base}projects/${slug}`;
 
-// Normalise category for CSS class and filter matching
 const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
 ---
 
@@ -28,15 +27,16 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
   <!-- Invisible full-card click target -->
   <a href={href} class="card-link" tabindex="-1" aria-hidden="true"></a>
 
-  <!-- Cover image -->
+  <!-- Cover -->
   {cover && (
     <div class="card-cover" aria-hidden="true">
       <img src={cover} alt="" loading="lazy" decoding="async" />
-      <div class="cover-gradient"></div>
+      <div class="cover-fade"></div>
     </div>
   )}
 
   <div class="card-body">
+
     <!-- Category + type -->
     <div class="card-meta">
       <span class={`cat-tag mono cat-${catKey}`}>{category}</span>
@@ -63,30 +63,41 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
       </div>
     )}
 
-    <!-- Tags -->
-    <div class="card-tags" aria-label="Skills and tools">
-      {tags.slice(0, 5).map((tag) => (
-        <span class="tag mono">{tag}</span>
-      ))}
-    </div>
+    <!-- Tags / skills -->
+    {tags.length > 0 && (
+      <div class="card-tags mono" aria-label="Skills and tools">
+        {tags.slice(0, 5).map((tag, i) => (
+          <span class="tag">{tag}{i < Math.min(tags.length, 5) - 1 ? ' ·' : ''}</span>
+        ))}
+      </div>
+    )}
+
+    <!-- Read more -->
+    <a href={href} class="card-cta mono" aria-hidden="true" tabindex="-1">
+      Read more →
+    </a>
+
   </div>
 </article>
 
 <style>
   .project-card {
     position: relative;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    padding: 0;
     transition:
       border-color var(--transition-mid),
       transform var(--transition-mid),
       box-shadow var(--transition-mid);
     animation: card-enter 0.45s ease both;
     animation-delay: calc(var(--card-index) * 80ms);
+    /* Slightly translucent so background glows show through */
+    backdrop-filter: blur(2px);
   }
 
   @keyframes card-enter {
@@ -94,18 +105,24 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .project-card { animation: none; }
+  }
+
   .project-card:hover {
-    border-color: var(--color-accent);
+    border-color: rgba(76, 141, 255, 0.45);
     transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(56, 189, 248, 0.08);
+    box-shadow:
+      0 0 0 1px rgba(76, 141, 255, 0.10),
+      0 12px 40px -12px rgba(76, 141, 255, 0.25);
   }
 
   .project-card:has(.card-link:focus-visible) {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
 
-  /* Invisible full-card click target */
+  /* Full-card invisible click target */
   .card-link {
     position: absolute;
     inset: 0;
@@ -114,17 +131,18 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
   }
 
   /* Title link sits above card-link */
-  .card-title a {
+  .card-title a,
+  .card-cta {
     position: relative;
     z-index: 2;
   }
 
-  /* ---- Cover ---- */
+  /* ── Cover ────────────────────────────────── */
   .card-cover {
     position: relative;
     aspect-ratio: 16 / 7;
     overflow: hidden;
-    background: var(--color-surface-alt);
+    background: rgba(17, 17, 20, 0.9);
   }
 
   .card-cover img {
@@ -133,29 +151,27 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
     object-fit: cover;
     object-position: center top;
     transition: transform 0.4s ease;
-    filter: brightness(0.85) saturate(0.9);
+    filter: brightness(0.8) saturate(0.85);
   }
 
-  .project-card:hover .card-cover img {
-    transform: scale(1.03);
-  }
+  .project-card:hover .card-cover img { transform: scale(1.03); }
 
-  .cover-gradient {
+  .cover-fade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, var(--color-surface) 100%);
+    background: linear-gradient(to bottom, transparent 50%, var(--bg) 100%);
   }
 
-  /* ---- Body ---- */
+  /* ── Body ─────────────────────────────────── */
   .card-body {
-    padding: var(--space-6);
+    padding: 28px;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
     flex: 1;
   }
 
-  /* ---- Meta ---- */
+  /* ── Meta ─────────────────────────────────── */
   .card-meta {
     display: flex;
     align-items: center;
@@ -164,32 +180,42 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
 
   .cat-tag {
     font-size: 0.68rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.07em;
     text-transform: uppercase;
     padding: 2px 8px;
     border-radius: var(--radius-sm);
-    border: 1px solid currentColor;
-    opacity: 0.9;
+    border-width: 1px;
+    border-style: solid;
   }
 
-  .cat-engineering { color: var(--color-cat-engineering); background: rgba(129, 140, 248, 0.07); }
-  .cat-data        { color: var(--color-cat-data);        background: rgba(52, 211, 153, 0.07); }
-  .cat-finance     { color: var(--color-cat-finance);     background: rgba(251, 191, 36, 0.07); }
-
-  /* fallback */
+  .cat-engineering {
+    color: var(--cat-engineering);
+    border-color: rgba(127, 176, 255, 0.30);
+    background: transparent;
+  }
+  .cat-data {
+    color: var(--cat-data);
+    border-color: rgba(196, 168, 255, 0.30);
+    background: transparent;
+  }
+  .cat-finance {
+    color: var(--cat-finance);
+    border-color: rgba(94, 230, 176, 0.30);
+    background: transparent;
+  }
+  /* Fallback */
   .cat-tag:not([class*="cat-engineering"]):not([class*="cat-data"]):not([class*="cat-finance"]) {
-    color: var(--color-text-muted);
-    background: var(--color-surface-alt);
-    border-color: var(--color-border);
+    color: var(--text-muted);
+    border-color: var(--border);
   }
 
   .meta-type {
     font-size: var(--text-xs);
-    color: var(--color-text-faint);
+    color: var(--text-faint);
   }
 
-  /* ---- Title ---- */
+  /* ── Title ────────────────────────────────── */
   .card-title {
     font-size: var(--text-lg);
     font-weight: 700;
@@ -198,15 +224,15 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
   }
 
   .card-title a {
-    color: var(--color-text);
+    color: var(--text);
     transition: color var(--transition-fast);
   }
-  .card-title a:hover { color: var(--color-accent); }
+  .card-title a:hover { color: var(--accent); }
 
-  /* ---- Summary ---- */
+  /* ── Summary ──────────────────────────────── */
   .card-summary {
     font-size: var(--text-sm);
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     line-height: 1.7;
     margin: 0;
     display: -webkit-box;
@@ -215,13 +241,13 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
     overflow: hidden;
   }
 
-  /* ---- Metrics ---- */
+  /* ── Metrics ──────────────────────────────── */
   .card-metrics {
     display: flex;
     gap: var(--space-6);
     padding: var(--space-4) 0;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
   }
 
@@ -234,39 +260,36 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
   .metric-value {
     font-size: var(--text-xl);
     font-weight: 700;
-    color: var(--color-text);
+    color: var(--text);
     letter-spacing: -0.03em;
     line-height: 1;
   }
 
   .metric-label {
     font-size: 0.68rem;
-    color: var(--color-text-muted);
+    color: var(--text-muted);
     line-height: 1.3;
     max-width: 10rem;
   }
 
-  /* ---- Tags ---- */
+  /* ── Tags / skills ────────────────────────── */
   .card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: auto;
-  }
-
-  .tag {
-    font-size: 0.68rem;
+    font-size: var(--text-xs);
+    color: var(--text-faint);
     letter-spacing: 0.03em;
-    color: var(--color-text-faint);
-    background: var(--color-surface-alt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 3px 8px;
-    transition: color var(--transition-fast), border-color var(--transition-fast);
+    line-height: 1.6;
   }
 
-  .project-card:hover .tag {
-    color: var(--color-text-muted);
-    border-color: var(--color-border-mid);
+  /* ── Read more ────────────────────────────── */
+  .card-cta {
+    display: inline-block;
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    margin-top: auto;
+    transition: opacity var(--transition-fast);
+    opacity: 0;
   }
+
+  .project-card:hover .card-cta { opacity: 1; }
 </style>

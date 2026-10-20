@@ -29,69 +29,46 @@ const projects = ORDER
 
     <!-- ── Hero ─────────────────────────────────────────── -->
     <section class="hero" aria-label="Introduction">
-      <div class="hero-bg" aria-hidden="true">
-        <div class="hero-glow"></div>
-        <div class="hero-grid"></div>
-      </div>
-
       <div class="hero-inner">
-        <p class="hero-eyebrow mono">
-          BEng Durham · MSc Imperial College London
-        </p>
 
-        <h1 class="hero-name">Nicholas Mommsen</h1>
+        <p class="hero-label mono">// Engineering · Data · Finance</p>
 
-        <!-- ✏️ EDIT THIS LINE — your positioning statement -->
+        <h1 class="hero-name">Nicholas<br/>Mommsen</h1>
+
+        <!-- ✏️ Edit this positioning statement -->
         <p class="hero-tagline">
           Engineer turning models and data into investment insight.
         </p>
 
-        <div class="hero-links" aria-label="Contact and profiles">
-          <a href="mailto:Nicholasmommsen@outlook.com" class="hero-link">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M1 5.5L8 9.5L15 5.5" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-            Email
-          </a>
-          <a href="https://www.linkedin.com/in/nicholas-mommsen" class="hero-link" target="_blank" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M4 6.5V12M4 4.5V4.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M8 12V9C8 7.9 8.7 7 10 7C11.3 7 12 7.9 12 9V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M8 6.5V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            LinkedIn
-          </a>
-          <a href="https://github.com/King7H-eng" class="hero-link" target="_blank" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M8 1C4.13 1 1 4.13 1 8c0 3.09 2.01 5.72 4.79 6.65.35.06.48-.15.48-.34v-1.19c-1.95.42-2.36-.94-2.36-.94-.32-.81-.78-1.03-.78-1.03-.64-.44.05-.43.05-.43.7.05 1.07.72 1.07.72.62 1.07 1.63.76 2.03.58.06-.45.24-.76.44-.93-1.55-.18-3.19-.78-3.19-3.46 0-.77.27-1.39.72-1.88-.07-.18-.31-.9.07-1.87 0 0 .59-.19 1.92.72A6.69 6.69 0 0 1 8 4.93c.59 0 1.19.08 1.75.24 1.33-.91 1.92-.72 1.92-.72.38.97.14 1.69.07 1.87.45.49.72 1.11.72 1.88 0 2.69-1.64 3.28-3.2 3.46.25.22.48.65.48 1.31v1.94c0 .19.13.4.48.34C12.99 13.72 15 11.09 15 8c0-3.87-3.13-7-7-7z" fill="currentColor"/>
-            </svg>
-            GitHub
-          </a>
-          <a href={`${base}cv.pdf`} class="hero-link hero-link--primary" target="_blank" rel="noopener noreferrer">
+        <div class="hero-actions">
+          <a href={`${base}cv.pdf`} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
             Download CV
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
           </a>
+          <a href="#projects" class="btn btn-secondary">
+            View projects
+          </a>
+          <a href="https://www.linkedin.com/in/nicholas-mommsen" class="hero-text-link" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          <a href="https://github.com/King7H-eng" class="hero-text-link" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         </div>
+
       </div>
     </section>
 
     <!-- ── Projects ──────────────────────────────────────── -->
-    <section class="projects-section" aria-labelledby="projects-heading">
+    <section class="projects-section" id="projects" aria-labelledby="projects-heading">
       <div class="section-inner">
-        <div class="section-header">
-          <h2 id="projects-heading" class="section-title">Projects</h2>
 
-          <!-- Filter chips -->
-          <div class="filters" role="group" aria-label="Filter projects by category">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="engineering">Engineering</button>
-            <button class="filter-btn" data-filter="data">Data</button>
-            <button class="filter-btn" data-filter="finance">Finance</button>
-          </div>
+        <div class="section-label-row">
+          <span class="section-label mono">// 01 — Selected projects</span>
+        </div>
+        <h2 id="projects-heading" class="section-heading">Work</h2>
+
+        <!-- Filter chips -->
+        <div class="filters" role="group" aria-label="Filter projects by category">
+          <button class="filter-btn mono active" data-filter="all">All</button>
+          <button class="filter-btn mono" data-filter="engineering">Engineering</button>
+          <button class="filter-btn mono" data-filter="data">Data</button>
+          <button class="filter-btn mono" data-filter="finance">Finance</button>
         </div>
 
         <div class="projects-grid" id="projects-grid">
@@ -111,6 +88,7 @@ const projects = ORDER
             )
           ))}
         </div>
+
       </div>
     </section>
 
@@ -119,18 +97,18 @@ const projects = ORDER
   <!-- ── Footer ────────────────────────────────────────── -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <span class="mono footer-mark">NM</span>
-      <span class="footer-copy">Nicholas Mommsen</span>
+      <span class="mono footer-mark">NM_</span>
+      <span class="footer-copy mono">Nicholas Mommsen · {new Date().getFullYear()}</span>
       <div class="footer-links">
-        <a href="mailto:Nicholasmommsen@outlook.com" class="footer-link">Email</a>
-        <a href="https://www.linkedin.com/in/nicholas-mommsen" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://github.com/King7H-eng/portfolio-page" class="footer-link" target="_blank" rel="noopener noreferrer">Source</a>
+        <a href="mailto:Nicholasmommsen@outlook.com" class="footer-link mono">Email</a>
+        <a href="https://www.linkedin.com/in/nicholas-mommsen" class="footer-link mono" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/King7H-eng/portfolio-page" class="footer-link mono" target="_blank" rel="noopener noreferrer">Source</a>
       </div>
     </div>
   </footer>
 </BaseLayout>
 
-<!-- Filter chip logic -->
+<!-- Filter logic -->
 <script>
   const btns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
   const cards = document.querySelectorAll<HTMLElement>('.project-card');
@@ -138,13 +116,10 @@ const projects = ORDER
   btns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const filter = btn.dataset.filter ?? 'all';
-
       btns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-
       cards.forEach((card) => {
-        const match = filter === 'all' || card.dataset.category === filter;
-        card.style.display = match ? '' : 'none';
+        card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
       });
     });
   });
@@ -153,97 +128,83 @@ const projects = ORDER
 <style>
   /* ── Hero ─────────────────────────────────────────────── */
   .hero {
-    position: relative;
-    padding: clamp(5rem, 14vw, 9rem) var(--gutter) clamp(4rem, 10vw, 6rem);
-    overflow: hidden;
-  }
-
-  /* Faint dot grid */
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-    background-size: 28px 28px;
-    mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
-  }
-
-  /* Radial glow behind heading */
-  .hero-glow {
-    position: absolute;
-    top: -10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 700px;
-    height: 400px;
-    background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.07) 0%, transparent 70%);
-    pointer-events: none;
+    padding: clamp(6rem, 14vw, 8rem) var(--gutter) clamp(4rem, 10vw, 7rem);
   }
 
   .hero-inner {
-    position: relative;
-    z-index: 1;
     max-width: var(--max-width);
     margin: 0 auto;
   }
 
-  .hero-eyebrow {
+  .hero-label {
     font-size: var(--text-xs);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-text-faint);
-    margin-bottom: var(--space-4);
+    color: var(--accent);
+    margin-bottom: var(--space-6);
   }
 
   .hero-name {
-    font-size: clamp(2.5rem, 7vw, 4.5rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1.0;
-    color: var(--color-text);
-    margin-bottom: var(--space-4);
+    font-size: clamp(2.75rem, 7vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    color: var(--text);
+    margin-bottom: var(--space-6);
   }
 
   .hero-tagline {
-    font-size: clamp(var(--text-base), 2vw, var(--text-xl));
-    color: var(--color-text-muted);
-    max-width: 42ch;
-    line-height: 1.6;
+    font-size: clamp(var(--text-base), 2vw, 1.25rem);
+    color: var(--text-muted);
+    max-width: 620px;
+    line-height: 1.65;
     margin-bottom: var(--space-8);
   }
 
-  .hero-links {
+  .hero-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3);
   }
 
-  .hero-link {
+  .btn {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    padding: 7px 14px;
-    border: 1px solid var(--color-border);
+    min-height: 44px;
+    padding: 0 var(--space-6);
     border-radius: var(--radius-md);
-    background: var(--color-surface);
-    transition: color var(--transition-fast), border-color var(--transition-fast);
-  }
-  .hero-link:hover {
-    color: var(--color-text);
-    border-color: var(--color-border-mid);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition: opacity var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    cursor: pointer;
   }
 
-  .hero-link--primary {
-    color: var(--color-accent);
-    border-color: rgba(56, 189, 248, 0.3);
-    background: var(--color-accent-bg);
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: 1px solid var(--accent);
   }
-  .hero-link--primary:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+  .btn-primary:hover { opacity: 0.88; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
   }
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-text-link {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    transition: color var(--transition-fast);
+    padding: 0 var(--space-2);
+  }
+  .hero-text-link:hover { color: var(--text); }
 
   /* ── Projects section ─────────────────────────────────── */
   .projects-section {
@@ -256,55 +217,55 @@ const projects = ORDER
     padding: 0 var(--gutter);
   }
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-    margin-bottom: var(--space-8);
-    padding-bottom: var(--space-6);
-    border-bottom: 1px solid var(--color-border);
+  .section-label-row {
+    margin-bottom: var(--space-3);
   }
 
-  .section-title {
-    font-size: var(--text-sm);
-    font-weight: 600;
+  .section-label {
+    font-size: var(--text-xs);
     letter-spacing: 0.08em;
+    color: var(--accent);
     text-transform: uppercase;
-    color: var(--color-text-faint);
+  }
+
+  .section-heading {
+    font-size: clamp(var(--text-3xl), 4vw, var(--text-4xl));
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: var(--space-8);
   }
 
   /* Filter chips */
   .filters {
     display: flex;
-    gap: var(--space-2);
     flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
   }
 
   .filter-btn {
-    font-family: var(--font-sans);
     font-size: var(--text-xs);
-    font-weight: 500;
-    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
     background: transparent;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
     cursor: pointer;
     transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
   }
   .filter-btn:hover {
-    color: var(--color-text);
-    border-color: var(--color-border-mid);
+    color: var(--text-muted);
+    border-color: var(--border-strong);
   }
   .filter-btn.active {
-    color: var(--color-accent);
-    border-color: rgba(56, 189, 248, 0.4);
-    background: var(--color-accent-bg);
+    color: var(--accent);
+    border-color: rgba(76, 141, 255, 0.5);
+    background: rgba(76, 141, 255, 0.07);
   }
 
-  /* Project grid */
+  /* Grid */
   .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -315,13 +276,9 @@ const projects = ORDER
     .projects-grid { grid-template-columns: 1fr; }
   }
 
-  @media (min-width: 1000px) {
-    .projects-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
   /* ── Footer ───────────────────────────────────────────── */
   .site-footer {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border);
     padding: var(--space-8) var(--gutter);
   }
 
@@ -338,13 +295,14 @@ const projects = ORDER
     font-size: var(--text-xs);
     font-weight: 700;
     letter-spacing: 0.1em;
-    color: var(--color-accent);
+    color: var(--accent);
   }
 
   .footer-copy {
-    font-size: var(--text-sm);
-    color: var(--color-text-faint);
+    font-size: var(--text-xs);
+    color: var(--text-faint);
     flex: 1;
+    letter-spacing: 0.03em;
   }
 
   .footer-links {
@@ -353,9 +311,10 @@ const projects = ORDER
   }
 
   .footer-link {
-    font-size: var(--text-sm);
-    color: var(--color-text-faint);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--text-faint);
     transition: color var(--transition-fast);
   }
-  .footer-link:hover { color: var(--color-text-muted); }
+  .footer-link:hover { color: var(--text-muted); }
 </style>

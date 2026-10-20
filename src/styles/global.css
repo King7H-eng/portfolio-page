@@ -1,71 +1,7 @@
 /* ============================================================
-   Design tokens
+   Global reset & base — tokens imported separately
    ============================================================ */
-:root {
-  /* Colour palette */
-  --color-bg:          #0A0A0B;
-  --color-surface:     #111114;
-  --color-surface-alt: #18181C;
-  --color-border:      rgba(255, 255, 255, 0.08);
-  --color-border-mid:  rgba(255, 255, 255, 0.14);
-  --color-text:        #EDEDED;
-  --color-text-muted:  #8A8F98;
-  --color-text-faint:  #4A4F5A;
 
-  /* Accent — sky blue */
-  --color-accent:      #38BDF8;
-  --color-accent-dim:  #0EA5E9;
-  --color-accent-bg:   rgba(56, 189, 248, 0.08);
-
-  /* Category tints */
-  --color-cat-engineering: #818CF8;
-  --color-cat-data:        #34D399;
-  --color-cat-finance:     #FBBF24;
-
-  /* Typography */
-  --font-sans: 'InterVariable', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains MonoVariable', 'JetBrains Mono', 'Fira Code', monospace;
-
-  /* Type scale */
-  --text-xs:   0.75rem;
-  --text-sm:   0.875rem;
-  --text-base: 1rem;
-  --text-lg:   1.125rem;
-  --text-xl:   1.25rem;
-  --text-2xl:  1.5rem;
-  --text-3xl:  1.875rem;
-  --text-4xl:  2.25rem;
-  --text-5xl:  3rem;
-
-  /* Spacing (4/8px scale) */
-  --space-1:  0.25rem;
-  --space-2:  0.5rem;
-  --space-3:  0.75rem;
-  --space-4:  1rem;
-  --space-6:  1.5rem;
-  --space-8:  2rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-24: 6rem;
-
-  /* Layout */
-  --max-width:     1100px;
-  --content-width: 70ch;
-  --gutter:        clamp(1rem, 4vw, 2rem);
-
-  /* Motion */
-  --transition-fast: 150ms ease;
-  --transition-mid:  200ms ease;
-
-  /* Radius */
-  --radius-sm:  4px;
-  --radius-md:  8px;
-  --radius-lg:  12px;
-}
-
-/* ============================================================
-   Reset & base
-   ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -83,9 +19,10 @@ body {
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: 1.6;
-  color: var(--color-text);
-  background-color: var(--color-bg);
+  color: var(--text);
+  background-color: var(--bg);
   min-height: 100dvh;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -105,7 +42,7 @@ a {
    Focus
    ============================================================ */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
@@ -126,40 +63,40 @@ a {
 }
 
 /* ============================================================
-   Prose — project body content (~70ch readable line length)
+   Prose — project detail body content
    ============================================================ */
 .prose {
   max-width: var(--content-width);
-  color: var(--color-text);
+  color: var(--text);
 }
 
 .prose h2 {
   font-size: var(--text-lg);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-text);
+  color: var(--text);
   margin-top: var(--space-12);
   margin-bottom: var(--space-4);
   padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border);
 }
 
 .prose h3 {
   font-size: var(--text-base);
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--text);
   margin-top: var(--space-8);
   margin-bottom: var(--space-3);
 }
 
 .prose p {
   margin-bottom: var(--space-4);
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   line-height: 1.8;
 }
 
 .prose strong {
-  color: var(--color-text);
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -169,12 +106,12 @@ a {
 }
 
 .prose li {
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   margin-bottom: var(--space-2);
   line-height: 1.75;
 }
 
-.prose li strong { color: var(--color-text); }
+.prose li strong { color: var(--text); }
 
 .prose table {
   width: 100%;
@@ -186,7 +123,7 @@ a {
 }
 
 .prose thead {
-  background: var(--color-surface-alt);
+  background: rgba(24, 24, 28, 0.90);
 }
 
 .prose th {
@@ -195,16 +132,16 @@ a {
   font-size: var(--text-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
 
 .prose td {
   padding: var(--space-3) var(--space-4);
-  color: var(--color-text-muted);
-  border-bottom: 1px solid var(--color-border);
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
   vertical-align: top;
   line-height: 1.6;
 }
@@ -214,11 +151,11 @@ a {
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.875em;
-  background: var(--color-surface-alt);
-  color: var(--color-accent);
+  background: rgba(24, 24, 28, 0.90);
+  color: var(--accent);
   padding: 0.1em 0.4em;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
 }
 
 /* ============================================================
