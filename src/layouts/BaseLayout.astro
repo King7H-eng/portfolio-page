@@ -1,4 +1,6 @@
 ---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 
 export interface Props {
@@ -29,6 +31,9 @@ const ogImageURL = ogImage
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+
   <!-- Open Graph -->
   <meta property="og:type" content={ogType} />
   <meta property="og:title" content={title} />
@@ -42,14 +47,6 @@ const ogImageURL = ogImage
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageURL} />
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet"
-  />
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
@@ -70,7 +67,5 @@ const ogImageURL = ogImage
     font-weight: 600;
     font-size: var(--text-sm);
   }
-  .skip-link:focus {
-    left: var(--space-4);
-  }
+  .skip-link:focus { left: var(--space-4); }
 </style>

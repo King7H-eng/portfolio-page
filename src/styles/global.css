@@ -1,38 +1,43 @@
 /* ============================================================
-   Signal design system — CSS custom properties
+   Design tokens
    ============================================================ */
-
-
 :root {
   /* Colour palette */
-  --color-bg:          #000000;
-  --color-surface:     #0A0A0A;
-  --color-surface-alt: #111111;
-  --color-border:      #1A1A1A;
-  --color-border-mid:  #262626;
-  --color-text:        #F0F0F0;
-  --color-text-muted:  #6E6E6E;
-  --color-text-faint:  #333333;
-  --color-accent:      #F0A020;
-  --color-accent-dim:  #C07A10;
-  --color-accent-bg:   #1A1000;
+  --color-bg:          #0A0A0B;
+  --color-surface:     #111114;
+  --color-surface-alt: #18181C;
+  --color-border:      rgba(255, 255, 255, 0.08);
+  --color-border-mid:  rgba(255, 255, 255, 0.14);
+  --color-text:        #EDEDED;
+  --color-text-muted:  #8A8F98;
+  --color-text-faint:  #4A4F5A;
 
-  /* Type */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  /* Accent — sky blue */
+  --color-accent:      #38BDF8;
+  --color-accent-dim:  #0EA5E9;
+  --color-accent-bg:   rgba(56, 189, 248, 0.08);
+
+  /* Category tints */
+  --color-cat-engineering: #818CF8;
+  --color-cat-data:        #34D399;
+  --color-cat-finance:     #FBBF24;
+
+  /* Typography */
+  --font-sans: 'InterVariable', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains MonoVariable', 'JetBrains Mono', 'Fira Code', monospace;
 
   /* Type scale */
-  --text-xs:   0.75rem;   /* 12px */
-  --text-sm:   0.875rem;  /* 14px */
-  --text-base: 1rem;      /* 16px */
-  --text-lg:   1.125rem;  /* 18px */
-  --text-xl:   1.25rem;   /* 20px */
-  --text-2xl:  1.5rem;    /* 24px */
-  --text-3xl:  1.875rem;  /* 30px */
-  --text-4xl:  2.25rem;   /* 36px */
-  --text-5xl:  3rem;      /* 48px */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
 
-  /* Spacing */
+  /* Spacing (4/8px scale) */
   --space-1:  0.25rem;
   --space-2:  0.5rem;
   --space-3:  0.75rem;
@@ -44,21 +49,19 @@
   --space-24: 6rem;
 
   /* Layout */
-  --max-width: 1200px;
-  --content-width: 720px;
-  --gutter: clamp(1rem, 4vw, 2rem);
+  --max-width:     1100px;
+  --content-width: 70ch;
+  --gutter:        clamp(1rem, 4vw, 2rem);
 
-  /* Transitions */
+  /* Motion */
   --transition-fast: 150ms ease;
-  --transition-mid:  250ms ease;
+  --transition-mid:  200ms ease;
 
   /* Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
 }
-
-/* Light mode intentionally disabled — site is dark-only */
 
 /* ============================================================
    Reset & base
@@ -73,6 +76,7 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
 }
 
 body {
@@ -98,7 +102,7 @@ a {
 }
 
 /* ============================================================
-   Focus styles — visible keyboard nav
+   Focus
    ============================================================ */
 :focus-visible {
   outline: 2px solid var(--color-accent);
@@ -107,16 +111,22 @@ a {
 }
 
 /* ============================================================
-   Typography helpers
+   Utilities
    ============================================================ */
 .mono {
   font-family: var(--font-mono);
   font-feature-settings: "tnum" 1, "lnum" 1;
-  letter-spacing: -0.01em;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap;
 }
 
 /* ============================================================
-   Prose (project body content)
+   Prose — project body content (~70ch readable line length)
    ============================================================ */
 .prose {
   max-width: var(--content-width);
@@ -124,18 +134,18 @@ a {
 }
 
 .prose h2 {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--color-text);
   margin-top: var(--space-12);
   margin-bottom: var(--space-4);
-  padding-bottom: var(--space-2);
+  padding-bottom: var(--space-3);
   border-bottom: 1px solid var(--color-border);
 }
 
 .prose h3 {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: 600;
   color: var(--color-text);
   margin-top: var(--space-8);
@@ -145,7 +155,7 @@ a {
 .prose p {
   margin-bottom: var(--space-4);
   color: var(--color-text-muted);
-  line-height: 1.75;
+  line-height: 1.8;
 }
 
 .prose strong {
@@ -161,12 +171,10 @@ a {
 .prose li {
   color: var(--color-text-muted);
   margin-bottom: var(--space-2);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
-.prose li strong {
-  color: var(--color-text);
-}
+.prose li strong { color: var(--color-text); }
 
 .prose table {
   width: 100%;
@@ -198,19 +206,17 @@ a {
   color: var(--color-text-muted);
   border-bottom: 1px solid var(--color-border);
   vertical-align: top;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
-.prose tr:last-child td {
-  border-bottom: none;
-}
+.prose tr:last-child td { border-bottom: none; }
 
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.875em;
   background: var(--color-surface-alt);
   color: var(--color-accent);
-  padding: 0.1em 0.35em;
+  padding: 0.1em 0.4em;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
 }

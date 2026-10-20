@@ -18,6 +18,8 @@ const { Content } = await render(project);
 const base = import.meta.env.BASE_URL;
 const backHref = base;
 
+const catKey = data.category.toLowerCase().replace(/[^a-z]/g, '');
+
 function formatDate(d?: string) {
   if (!d || d === 'TODO') return null;
   const parts = d.split('-');
@@ -38,41 +40,38 @@ const dateDisplay = formatDate(data.date);
 >
   <SiteHeader />
 
-  <!-- Accent rule at very top of page content -->
-  <div class="page-accent-bar" aria-hidden="true"></div>
-
   <main id="main-content" class="project-page">
 
     <!-- Back nav -->
-    <div class="back-bar">
+    <nav class="back-bar" aria-label="Breadcrumb">
       <div class="back-inner">
-        <a href={backHref} class="back-link" aria-label="Back to all projects">
+        <a href={backHref} class="back-link">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span class="mono">←</span> ALL PROJECTS
+          All projects
         </a>
       </div>
-    </div>
+    </nav>
 
     <!-- Project header -->
     <header class="project-header">
       <div class="header-inner">
 
-        <div class="project-meta mono" aria-label="Project metadata">
-          <span class="meta-category">{data.category.toUpperCase()}</span>
-          <span class="meta-divider" aria-hidden="true">/</span>
+        <div class="project-meta" aria-label="Project metadata">
+          <span class={`cat-badge mono cat-${catKey}`}>{data.category}</span>
+          <span class="meta-dot" aria-hidden="true">·</span>
           <span class="meta-type">{data.type}</span>
           {data.institution && data.institution !== 'TODO' && (
             <>
-              <span class="meta-divider" aria-hidden="true">/</span>
-              <span class="meta-institution">{data.institution}</span>
+              <span class="meta-dot" aria-hidden="true">·</span>
+              <span class="meta-inst">{data.institution}</span>
             </>
           )}
           {dateDisplay && (
             <>
-              <span class="meta-divider" aria-hidden="true">/</span>
-              <time class="meta-date">{dateDisplay}</time>
+              <span class="meta-dot" aria-hidden="true">·</span>
+              <time class="meta-date mono">{dateDisplay}</time>
             </>
           )}
         </div>
@@ -83,43 +82,41 @@ const dateDisplay = formatDate(data.date);
 
         {data.team && data.team.length > 0 && (
           <div class="project-team">
-            <span class="team-label mono">TEAM</span>
-            <span class="team-names">{data.team.join('  ·  ')}</span>
+            <span class="team-label mono">Team</span>
+            <span class="team-names">{data.team.join(' · ')}</span>
           </div>
         )}
       </div>
     </header>
 
-    <!-- Metric cells -->
-    <section class="metrics-panel" aria-label="Key metrics">
-      <div class="metrics-inner">
-        <div class="metrics-label mono" aria-hidden="true">// KEY RESULTS</div>
-        <div class="metrics-cells">
+    <!-- Metrics band -->
+    {data.metrics.length > 0 && (
+      <section class="metrics-band" aria-label="Key metrics">
+        <div class="metrics-inner">
           {data.metrics.map((m, i) => (
-            <div class="metric-cell">
-              <div class="metric-cell-index mono" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
-              </div>
+            <div class="metric-item">
               <span
                 class="metric-value mono"
                 data-target={m.value}
-                aria-label={`${m.value} — ${m.label}`}
+                aria-label={`${m.value}: ${m.label}`}
               >
                 {m.value}
               </span>
               <span class="metric-label">{m.label}</span>
+              {i < data.metrics.length - 1 && (
+                <div class="metric-divider" aria-hidden="true"></div>
+              )}
             </div>
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    )}
 
     <!-- Cover image -->
     {data.cover && (
       <div class="project-cover">
-        <div class="cover-scanlines" aria-hidden="true"></div>
         <img src={data.cover} alt="" loading="eager" decoding="async" />
-        <div class="cover-overlay" aria-hidden="true"></div>
+        <div class="cover-fade" aria-hidden="true"></div>
       </div>
     )}
 
@@ -127,25 +124,16 @@ const dateDisplay = formatDate(data.date);
     <div class="project-body">
       <div class="project-body-inner">
 
-        <!-- Prose -->
         <div class="prose project-prose">
           <Content />
         </div>
 
-        <!-- Figures -->
         {data.figures && data.figures.length > 0 && (
           <section class="figures-section" aria-labelledby="figures-heading">
-            <div class="figures-header">
-              <span class="mono figures-label" aria-hidden="true">// FIGURES</span>
-              <h2 id="figures-heading" class="sr-only">Figures</h2>
-            </div>
+            <h2 id="figures-heading" class="figures-heading">Figures</h2>
             <div class="figures-grid">
               {data.figures.map((fig, i) => (
-                <figure class="fig-panel">
-                  <div class="fig-panel-header" aria-hidden="true">
-                    <span class="mono fig-index">FIG.{String(i + 1).padStart(2, '0')}</span>
-                    <div class="fig-panel-rule"></div>
-                  </div>
+                <figure class="fig-item">
                   <div class="fig-img-wrap">
                     <img
                       src={fig.src}
@@ -154,7 +142,10 @@ const dateDisplay = formatDate(data.date);
                       decoding="async"
                     />
                   </div>
-                  <figcaption class="fig-caption">{fig.caption}</figcaption>
+                  <figcaption class="fig-caption">
+                    <span class="fig-num mono">Fig. {i + 1}</span>
+                    {fig.caption}
+                  </figcaption>
                 </figure>
               ))}
             </div>
@@ -167,7 +158,7 @@ const dateDisplay = formatDate(data.date);
   </main>
 </BaseLayout>
 
-<!-- Count-up animation -->
+<!-- Count-up on metrics -->
 <script>
   function animateCount(el: HTMLElement) {
     const raw = el.dataset.target ?? '';
@@ -175,7 +166,7 @@ const dateDisplay = formatDate(data.date);
     if (!match) return;
     const target = parseFloat(match[0]);
     const isFloat = raw.includes('.');
-    const duration = 1400;
+    const duration = 1200;
     const start = performance.now();
 
     function step(now: number) {
@@ -190,7 +181,6 @@ const dateDisplay = formatDate(data.date);
     requestAnimationFrame(step);
   }
 
-  const metricEls = document.querySelectorAll<HTMLElement>('.metric-value[data-target]');
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -202,37 +192,21 @@ const dateDisplay = formatDate(data.date);
     },
     { threshold: 0.4 }
   );
-  metricEls.forEach((el) => observer.observe(el));
+
+  document.querySelectorAll<HTMLElement>('.metric-value[data-target]')
+    .forEach((el) => observer.observe(el));
 </script>
 
 <style>
-  /* ----------------------------------------------------------------
-     Page-level grid texture
-  ---------------------------------------------------------------- */
+  /* ── Page shell ──────────────────────────────────────── */
   .project-page {
     min-height: 100dvh;
-    background-image:
-      linear-gradient(rgba(30, 37, 53, 0.35) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(30, 37, 53, 0.35) 1px, transparent 1px);
-    background-size: 56px 56px;
-    background-position: center top;
   }
 
-  /* Top amber rule */
-  .page-accent-bar {
-    height: 2px;
-    background: var(--color-accent);
-    width: 100%;
-  }
-
-  /* ----------------------------------------------------------------
-     Back bar
-  ---------------------------------------------------------------- */
+  /* ── Back nav ────────────────────────────────────────── */
   .back-bar {
     border-bottom: 1px solid var(--color-border);
     padding: var(--space-3) 0;
-    background: rgba(10, 13, 18, 0.7);
-    backdrop-filter: blur(4px);
   }
 
   .back-inner {
@@ -245,33 +219,16 @@ const dateDisplay = formatDate(data.date);
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
-    text-transform: uppercase;
     transition: color var(--transition-fast);
   }
-  .back-link:hover { color: var(--color-accent); }
+  .back-link:hover { color: var(--color-text); }
 
-  /* ----------------------------------------------------------------
-     Project header
-  ---------------------------------------------------------------- */
+  /* ── Project header ──────────────────────────────────── */
   .project-header {
     padding: var(--space-16) 0 var(--space-12);
     border-bottom: 1px solid var(--color-border);
-    position: relative;
-  }
-
-  /* Left accent bar */
-  .project-header::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(to bottom, var(--color-accent), transparent);
   }
 
   .header-inner {
@@ -285,31 +242,42 @@ const dateDisplay = formatDate(data.date);
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
+    font-size: var(--text-xs);
     margin-bottom: var(--space-6);
-    color: var(--color-text-faint);
   }
 
-  .meta-category { color: var(--color-accent); }
-  .meta-divider  { color: var(--color-text-faint); }
-  .meta-type, .meta-institution, .meta-date { color: var(--color-text-muted); }
+  .cat-badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid currentColor;
+  }
+  .cat-engineering { color: var(--color-cat-engineering); background: rgba(129, 140, 248, 0.07); }
+  .cat-data        { color: var(--color-cat-data);        background: rgba(52, 211, 153, 0.07); }
+  .cat-finance     { color: var(--color-cat-finance);     background: rgba(251, 191, 36, 0.07); }
+
+  .meta-dot  { color: var(--color-text-faint); }
+  .meta-type, .meta-inst { color: var(--color-text-muted); }
+  .meta-date { color: var(--color-text-muted); font-size: 0.72rem; }
 
   .project-title {
     font-size: clamp(var(--text-2xl), 4.5vw, 3.25rem);
     font-weight: 800;
     letter-spacing: -0.035em;
-    line-height: 1.08;
+    line-height: 1.1;
     color: var(--color-text);
-    max-width: 20ch;
+    max-width: 22ch;
     margin-bottom: var(--space-6);
   }
 
   .project-summary {
     font-size: var(--text-base);
     color: var(--color-text-muted);
-    max-width: 68ch;
-    line-height: 1.75;
+    max-width: 65ch;
+    line-height: 1.8;
     margin-bottom: var(--space-6);
   }
 
@@ -321,139 +289,93 @@ const dateDisplay = formatDate(data.date);
   }
 
   .team-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--color-accent);
-    padding: 2px 6px;
-    border: 1px solid var(--color-accent-bg);
-    background: var(--color-accent-bg);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
   }
 
   .team-names {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.02em;
+    font-size: 0.78rem;
   }
 
-  /* ----------------------------------------------------------------
-     Metrics panel
-  ---------------------------------------------------------------- */
-  .metrics-panel {
-    background: var(--color-surface);
+  /* ── Metrics band ────────────────────────────────────── */
+  .metrics-band {
     border-bottom: 1px solid var(--color-border);
-    padding: var(--space-8) 0;
+    background: var(--color-surface);
   }
 
   .metrics-inner {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 0 var(--gutter);
-  }
-
-  .metrics-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    color: var(--color-text-faint);
-    margin-bottom: var(--space-6);
-  }
-
-  .metrics-cells {
+    padding: var(--space-8) var(--gutter);
     display: flex;
-    gap: 1px;
     flex-wrap: wrap;
+    gap: 0;
   }
 
-  .metric-cell {
+  .metric-item {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    padding: var(--space-6);
-    background: var(--color-surface-alt);
-    border: 1px solid var(--color-border);
-    border-left: 2px solid var(--color-accent);
-    min-width: 160px;
+    padding: var(--space-4) var(--space-8) var(--space-4) 0;
     flex: 1;
-    max-width: 280px;
+    min-width: 140px;
   }
 
-  .metric-cell-index {
+  .metric-divider {
     position: absolute;
-    top: var(--space-3);
     right: var(--space-4);
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    color: var(--color-text-faint);
+    top: var(--space-4);
+    bottom: var(--space-4);
+    width: 1px;
+    background: var(--color-border);
   }
 
   .metric-value {
-    font-size: clamp(var(--text-3xl), 3.5vw, var(--text-4xl));
+    font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
     font-weight: 700;
-    color: var(--color-accent);
+    color: var(--color-text);
     letter-spacing: -0.04em;
     line-height: 1;
-    text-shadow:
-      0 0 20px rgba(240, 160, 32, 0.4),
-      0 0 40px rgba(240, 160, 32, 0.15);
   }
 
   .metric-label {
     font-size: 0.72rem;
     color: var(--color-text-muted);
-    letter-spacing: 0.03em;
     line-height: 1.4;
-    max-width: 14rem;
+    max-width: 16rem;
   }
 
-  /* ----------------------------------------------------------------
-     Cover image
-  ---------------------------------------------------------------- */
+  /* ── Cover image ─────────────────────────────────────── */
   .project-cover {
     position: relative;
-    max-height: 400px;
     overflow: hidden;
+    max-height: 420px;
     border-bottom: 1px solid var(--color-border);
   }
 
   .project-cover img {
     width: 100%;
-    height: 400px;
+    height: 420px;
     object-fit: cover;
     object-position: center;
     display: block;
-    filter: brightness(0.75) saturate(0.85);
+    filter: brightness(0.8) saturate(0.85);
   }
 
-  .cover-overlay {
+  .cover-fade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 30%,
-      rgba(10, 13, 18, 0.85) 100%
-    );
+    background: linear-gradient(to bottom, transparent 40%, var(--color-bg) 100%);
   }
 
-  /* Subtle scanline effect */
-  .cover-scanlines {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.08) 2px,
-      rgba(0, 0, 0, 0.08) 4px
-    );
-    pointer-events: none;
-  }
-
-  /* ----------------------------------------------------------------
-     Prose body
-  ---------------------------------------------------------------- */
+  /* ── Prose body ──────────────────────────────────────── */
   .project-body {
     padding: var(--space-16) 0 var(--space-24);
   }
@@ -468,57 +390,20 @@ const dateDisplay = formatDate(data.date);
     max-width: var(--content-width);
   }
 
-  /* Override prose headings to feel more digital */
-  .project-prose :global(h2) {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin-top: var(--space-12);
-    margin-bottom: var(--space-6);
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-
-  .project-prose :global(h2)::before {
-    content: '// ';
-    color: var(--color-text-faint);
-  }
-
-  .project-prose :global(h3) {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    margin-top: var(--space-8);
-    margin-bottom: var(--space-3);
-  }
-
-  /* ----------------------------------------------------------------
-     Figures
-  ---------------------------------------------------------------- */
+  /* ── Figures ─────────────────────────────────────────── */
   .figures-section {
     margin-top: var(--space-16);
     padding-top: var(--space-12);
     border-top: 1px solid var(--color-border);
   }
 
-  .figures-header {
-    margin-bottom: var(--space-8);
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-  }
-
-  .figures-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
+  .figures-heading {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--color-text-faint);
-    white-space: nowrap;
+    margin-bottom: var(--space-8);
   }
 
   .figures-grid {
@@ -527,40 +412,18 @@ const dateDisplay = formatDate(data.date);
     gap: var(--space-6);
   }
 
-  .fig-panel {
+  .fig-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-  }
-
-  .fig-panel-header {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-2) var(--space-3);
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-surface-alt);
-  }
-
-  .fig-index {
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--color-accent);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .fig-panel-rule {
-    flex: 1;
-    height: 1px;
-    background: var(--color-border);
   }
 
   .fig-img-wrap {
     overflow: hidden;
-    background: #070A0F;
+    background: var(--color-surface-alt);
   }
 
   .fig-img-wrap img {
@@ -569,42 +432,32 @@ const dateDisplay = formatDate(data.date);
     display: block;
     transition: transform 0.4s ease;
   }
-  .fig-panel:hover .fig-img-wrap img {
-    transform: scale(1.02);
-  }
+  .fig-item:hover .fig-img-wrap img { transform: scale(1.02); }
 
   .fig-caption {
     padding: var(--space-3) var(--space-4);
-    font-size: 0.72rem;
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
-    line-height: 1.55;
+    line-height: 1.6;
     border-top: 1px solid var(--color-border);
-    background: var(--color-surface-alt);
-    font-family: var(--font-mono);
   }
 
-  /* ----------------------------------------------------------------
-     Responsive
-  ---------------------------------------------------------------- */
+  .fig-num {
+    color: var(--color-accent);
+    margin-right: var(--space-2);
+    font-size: 0.68rem;
+  }
+
+  /* ── Responsive ──────────────────────────────────────── */
   @media (max-width: 700px) {
-    .figures-grid { grid-template-columns: 1fr; }
-    .metrics-cells { gap: var(--space-2); }
-    .metric-cell { min-width: 140px; padding: var(--space-4); }
-    .metric-value { font-size: var(--text-2xl); }
-    .project-cover img { height: 240px; }
+    .figures-grid  { grid-template-columns: 1fr; }
+    .metrics-inner { gap: var(--space-4); }
+    .metric-item   { min-width: 120px; padding-right: var(--space-6); }
+    .project-cover img { height: 220px; }
   }
 
   @media (max-width: 480px) {
-    .metric-cell { max-width: 100%; flex: 0 0 100%; }
-  }
-
-  /* ----------------------------------------------------------------
-     Utilities
-  ---------------------------------------------------------------- */
-  .sr-only {
-    position: absolute;
-    width: 1px; height: 1px;
-    overflow: hidden; clip: rect(0,0,0,0);
-    white-space: nowrap;
+    .metric-item   { flex: 0 0 100%; }
+    .metric-divider { display: none; }
   }
 </style>

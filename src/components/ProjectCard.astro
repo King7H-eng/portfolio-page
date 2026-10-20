@@ -14,48 +14,58 @@ export interface Props {
 const { title, slug, summary, metrics, tags, category, type, cover, index } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const href = `${base}projects/${slug}`;
+
+// Normalise category for CSS class and filter matching
+const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
 ---
 
 <article
   class="project-card"
   style={`--card-index: ${index}`}
+  data-category={catKey}
   aria-label={title}
 >
+  <!-- Invisible full-card click target -->
   <a href={href} class="card-link" tabindex="-1" aria-hidden="true"></a>
 
-  <div class="card-cover" aria-hidden="true">
-    {cover ? (
+  <!-- Cover image -->
+  {cover && (
+    <div class="card-cover" aria-hidden="true">
       <img src={cover} alt="" loading="lazy" decoding="async" />
-    ) : (
-      <div class="cover-placeholder"></div>
-    )}
-    <div class="cover-overlay"></div>
-  </div>
+      <div class="cover-gradient"></div>
+    </div>
+  )}
 
   <div class="card-body">
+    <!-- Category + type -->
     <div class="card-meta">
-      <span class="meta-category mono">{category}</span>
-      <span class="meta-sep" aria-hidden="true">·</span>
+      <span class={`cat-tag mono cat-${catKey}`}>{category}</span>
       <span class="meta-type">{type}</span>
     </div>
 
+    <!-- Title -->
     <h2 class="card-title">
       <a href={href}>{title}</a>
     </h2>
 
+    <!-- Summary -->
     <p class="card-summary">{summary}</p>
 
-    <div class="card-metrics" aria-label="Key metrics">
-      {metrics.slice(0, 3).map((m) => (
-        <div class="metric">
-          <span class="metric-value mono" data-target={m.value}>{m.value}</span>
-          <span class="metric-label">{m.label}</span>
-        </div>
-      ))}
-    </div>
+    <!-- Metrics -->
+    {metrics.length > 0 && (
+      <div class="card-metrics" aria-label="Key metrics">
+        {metrics.slice(0, 3).map((m) => (
+          <div class="metric">
+            <span class="metric-value mono">{m.value}</span>
+            <span class="metric-label">{m.label}</span>
+          </div>
+        ))}
+      </div>
+    )}
 
-    <div class="card-tags" aria-label="Tags">
-      {tags.slice(0, 4).map((tag) => (
+    <!-- Tags -->
+    <div class="card-tags" aria-label="Skills and tools">
+      {tags.slice(0, 5).map((tag) => (
         <span class="tag mono">{tag}</span>
       ))}
     </div>
@@ -73,25 +83,21 @@ const href = `${base}projects/${slug}`;
     flex-direction: column;
     transition:
       border-color var(--transition-mid),
-      transform var(--transition-mid);
-    animation: card-enter 0.5s ease both;
+      transform var(--transition-mid),
+      box-shadow var(--transition-mid);
+    animation: card-enter 0.45s ease both;
     animation-delay: calc(var(--card-index) * 80ms);
   }
 
   @keyframes card-enter {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .project-card:hover {
-    border-color: var(--color-border-mid);
+    border-color: var(--color-accent);
     transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(56, 189, 248, 0.08);
   }
 
   .project-card:has(.card-link:focus-visible) {
@@ -107,13 +113,13 @@ const href = `${base}projects/${slug}`;
     border-radius: inherit;
   }
 
-  /* Make the title link sit above the card-link */
+  /* Title link sits above card-link */
   .card-title a {
     position: relative;
     z-index: 2;
   }
 
-  /* ---- Cover image ---- */
+  /* ---- Cover ---- */
   .card-cover {
     position: relative;
     aspect-ratio: 16 / 7;
@@ -127,33 +133,20 @@ const href = `${base}projects/${slug}`;
     object-fit: cover;
     object-position: center top;
     transition: transform 0.4s ease;
+    filter: brightness(0.85) saturate(0.9);
   }
 
   .project-card:hover .card-cover img {
     transform: scale(1.03);
   }
 
-  .cover-overlay {
+  .cover-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent 40%,
-      rgba(10, 13, 18, 0.7) 100%
-    );
+    background: linear-gradient(to bottom, transparent 50%, var(--color-surface) 100%);
   }
 
-  .cover-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      135deg,
-      var(--color-surface-alt) 0%,
-      var(--color-accent-bg) 100%
-    );
-  }
-
-  /* ---- Card body ---- */
+  /* ---- Body ---- */
   .card-body {
     padding: var(--space-6);
     display: flex;
@@ -162,35 +155,46 @@ const href = `${base}projects/${slug}`;
     flex: 1;
   }
 
+  /* ---- Meta ---- */
   .card-meta {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-xs);
+    gap: var(--space-3);
   }
 
-  .meta-category {
-    color: var(--color-accent);
-    letter-spacing: 0.06em;
+  .cat-tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    font-size: 0.7rem;
-    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid currentColor;
+    opacity: 0.9;
   }
 
-  .meta-sep {
-    color: var(--color-text-faint);
+  .cat-engineering { color: var(--color-cat-engineering); background: rgba(129, 140, 248, 0.07); }
+  .cat-data        { color: var(--color-cat-data);        background: rgba(52, 211, 153, 0.07); }
+  .cat-finance     { color: var(--color-cat-finance);     background: rgba(251, 191, 36, 0.07); }
+
+  /* fallback */
+  .cat-tag:not([class*="cat-engineering"]):not([class*="cat-data"]):not([class*="cat-finance"]) {
+    color: var(--color-text-muted);
+    background: var(--color-surface-alt);
+    border-color: var(--color-border);
   }
 
   .meta-type {
-    color: var(--color-text-muted);
     font-size: var(--text-xs);
+    color: var(--color-text-faint);
   }
 
+  /* ---- Title ---- */
   .card-title {
     font-size: var(--text-lg);
     font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.3;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
   }
 
   .card-title a {
@@ -199,10 +203,11 @@ const href = `${base}projects/${slug}`;
   }
   .card-title a:hover { color: var(--color-accent); }
 
+  /* ---- Summary ---- */
   .card-summary {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    line-height: 1.65;
+    line-height: 1.7;
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -213,7 +218,7 @@ const href = `${base}projects/${slug}`;
   /* ---- Metrics ---- */
   .card-metrics {
     display: flex;
-    gap: var(--space-4);
+    gap: var(--space-6);
     padding: var(--space-4) 0;
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
@@ -223,24 +228,22 @@ const href = `${base}projects/${slug}`;
   .metric {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+    gap: 3px;
   }
 
   .metric-value {
     font-size: var(--text-xl);
     font-weight: 700;
-    color: var(--color-accent);
+    color: var(--color-text);
     letter-spacing: -0.03em;
     line-height: 1;
   }
 
   .metric-label {
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     color: var(--color-text-muted);
-    letter-spacing: 0.03em;
     line-height: 1.3;
-    max-width: 9rem;
+    max-width: 10rem;
   }
 
   /* ---- Tags ---- */
@@ -252,12 +255,18 @@ const href = `${base}projects/${slug}`;
   }
 
   .tag {
-    font-size: 0.65rem;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    color: var(--color-text-faint);
     background: var(--color-surface-alt);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    padding: 2px 8px;
+    padding: 3px 8px;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .project-card:hover .tag {
+    color: var(--color-text-muted);
+    border-color: var(--color-border-mid);
   }
 </style>
