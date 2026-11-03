@@ -102,7 +102,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
         </div>
 
         <h1 class="project-title">{data.title}</h1>
-        <p class="project-summary">{data.summary}</p>
+        {data.abstract ? (
+          <div class="project-abstract">
+            <p class="abstract-label mono">Abstract</p>
+            <p class="project-summary">{data.abstract}</p>
+          </div>
+        ) : (
+          <p class="project-summary">{data.summary}</p>
+        )}
       </div>
     </header>
 
@@ -124,7 +131,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     {coverPhoto && (
       <div class="wrap cover-photo-wrap">
         <div class="cover-photo">
-          <img src={coverPhoto} alt={data.coverAlt ?? ''} loading="eager" decoding="async" fetchpriority="high" />
+          <img src={coverPhoto} alt={data.coverAlt ?? ''} style={data.coverPosition ? `object-position:${data.coverPosition}` : undefined} loading="eager" decoding="async" fetchpriority="high" />
         </div>
       </div>
     )}
@@ -152,6 +159,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
       <aside class="sidebar" aria-label="Project details">
         <div class="sidebar-inner">
 
+          {data.showFacts && (
           <section class="side-block">
             <h2 class="side-heading mono">At a glance</h2>
             <dl class="facts">
@@ -163,6 +171,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
               ))}
             </dl>
           </section>
+          )}
 
           {data.tags.length > 0 && (
             <section class="side-block">
@@ -351,6 +360,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
     font-weight: 800; letter-spacing: -0.035em; line-height: 1.08;
     color: var(--text); max-width: 22ch; margin-bottom: var(--space-6);
     text-wrap: balance;
+  }
+  .project-abstract { border-left: 2px solid var(--accent); padding-left: var(--space-5, 1.25rem); max-width: 66ch; }
+  .abstract-label {
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 var(--space-2);
   }
   .project-summary {
     font-size: var(--text-lg); color: var(--text-muted);
