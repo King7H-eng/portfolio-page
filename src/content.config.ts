@@ -23,6 +23,9 @@ const projects = defineCollection({
     team: z.array(z.string()).optional(),
     cover: z.string(),
     coverAlt: z.string().optional(),
+    coverPosition: z.string().optional(),
+    abstract: z.string().optional(),
+    showFacts: z.boolean().default(true),
     ogImage: z.string().optional(),
     figures: z.array(
       z.object({

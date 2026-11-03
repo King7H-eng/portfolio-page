@@ -51,14 +51,61 @@ const projects = ORDER
       </div>
     </section>
 
+    <!-- ── About ─────────────────────────────────────────── -->
+    <section class="about-section" id="about" aria-labelledby="about-heading">
+      <div class="section-inner">
+        <div class="section-label-row">
+          <span class="section-label mono">// 01 — Background</span>
+        </div>
+        <h2 id="about-heading" class="section-heading">About</h2>
+
+        <div class="about-grid">
+          <div class="about-text">
+            <p>
+              I was born in Cape Town, South Africa, and moved to the UK in 2021 for university. I am now
+              completing an MSc in Advanced Computational Methods for Aeronautics at Imperial College London,
+              specialising in the space side of the programme: orbital mechanics, spacecraft propulsion, and
+              the aerothermodynamics of launchers and re-entry vehicles. Alongside this, I am taking a minor
+              specialisation in machine learning and applied AI.
+            </p>
+            <p>
+              At Durham University I graduated with a First in Mechanical Engineering, and completed two
+              buy-side investment analyst internships alongside my degree. I was also active in the
+              university's student finance societies, where I held leadership roles, wrote market commentary
+              on the energy and commodities sector, and competed in stock pitch competitions.
+            </p>
+          </div>
+
+          <dl class="about-facts">
+            <div class="about-fact">
+              <dt class="mono">Now</dt>
+              <dd>MSc Advanced Computational Methods for Aeronautics<span>Imperial College London</span></dd>
+            </div>
+            <div class="about-fact">
+              <dt class="mono">Previously</dt>
+              <dd>BEng Mechanical Engineering, First Class<span>Durham University</span></dd>
+            </div>
+            <div class="about-fact">
+              <dt class="mono">Finance</dt>
+              <dd>Two buy-side investment analyst internships<span>Energy &amp; commodities commentary</span></dd>
+            </div>
+            <div class="about-fact">
+              <dt class="mono">From</dt>
+              <dd>Cape Town, South Africa<span>Based in London</span></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
     <!-- ── Projects ──────────────────────────────────────── -->
     <section class="projects-section" id="projects" aria-labelledby="projects-heading">
       <div class="section-inner">
 
         <div class="section-label-row">
-          <span class="section-label mono">// 01 — Selected projects</span>
+          <span class="section-label mono">// 02 — Selected projects</span>
         </div>
-        <h2 id="projects-heading" class="section-heading">Work</h2>
+        <h2 id="projects-heading" class="section-heading">Projects</h2>
 
         <!-- Filter chips -->
         <div class="filters" role="group" aria-label="Filter projects by category">
@@ -80,6 +127,7 @@ const projects = ORDER
                 category={project.data.category}
                 type={project.data.type}
                 cover={project.data.cover}
+                coverPosition={project.data.coverPosition}
                 index={i}
               />
             )
@@ -209,6 +257,60 @@ const projects = ORDER
     padding: 0 var(--space-2);
   }
   .hero-text-link:hover { color: var(--text); }
+
+  /* ── About section ────────────────────────────────────── */
+  .about-section {
+    padding: var(--space-12) 0;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: var(--space-12);
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 62ch;
+    margin: 0 0 var(--space-4);
+    text-wrap: pretty;
+  }
+  .about-facts {
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    backdrop-filter: blur(2px);
+  }
+  .about-fact {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5, 1.25rem);
+  }
+  .about-fact + .about-fact { border-top: 1px solid var(--border); }
+  .about-fact dt {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-top: 3px;
+  }
+  .about-fact dd {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .about-fact dd span {
+    display: block;
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    margin-top: 2px;
+  }
+  @media (max-width: 860px) {
+    .about-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+  }
 
   /* ── Projects section ─────────────────────────────────── */
   .projects-section {
