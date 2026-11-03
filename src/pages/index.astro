@@ -3,15 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+import { PROJECT_ORDER } from '../lib/projects';
 
 const base = import.meta.env.BASE_URL;
 
-const ORDER = [
-  'battery-cooling',
-  'ai-energy-utilities',
-  'evtol-drone',
-  'statistics',
-];
+const ORDER = PROJECT_ORDER;
 
 const allProjects = await getCollection('projects');
 const projects = ORDER
@@ -69,7 +65,7 @@ const projects = ORDER
           <button class="filter-btn mono active" data-filter="all">All</button>
           <button class="filter-btn mono" data-filter="engineering">Engineering</button>
           <button class="filter-btn mono" data-filter="data">Data</button>
-          <button class="filter-btn mono" data-filter="finance">Finance</button>
+          <button class="filter-btn mono" data-filter="energy">Energy</button>
         </div>
 
         <div class="projects-grid" id="projects-grid">

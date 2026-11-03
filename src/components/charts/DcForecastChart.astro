@@ -1,0 +1,124 @@
+---
+/**
+ * Figure 1 of the AI / US energy utilities market commentary.
+ * Values are exactly those labelled on the original Matplotlib figure
+ * (Global Data Centre Electricity Consumption Forecasts, 2030, TWh).
+ * Redrawn in HTML/CSS so it matches the site theme and stays crisp at any width.
+ */
+const data = [
+  { source: 'Gartner', twh: 980 },
+  { source: 'IEA', twh: 945 },
+  { source: 'BloombergNEF', twh: 1200 },
+  { source: 'S&P Global', twh: 1500 },
+  { source: 'McKinsey', twh: 1400 },
+  { source: 'Oxford Energy Institute', twh: 770 },
+].sort((a, b) => b.twh - a.twh);
+
+const max = 1600; // axis ceiling
+const ticks = [0, 400, 800, 1200, 1600];
+const hi = Math.max(...data.map((d) => d.twh));
+const lo = Math.min(...data.map((d) => d.twh));
+const fmt = (n: number) => n.toLocaleString('en-GB');
+---
+
+<figure class="dc-chart not-prose">
+  <div class="dc-head">
+    <p class="dc-title">Global data-centre electricity consumption forecasts</p>
+    <p class="dc-sub mono">2030 · TWh per year</p>
+  </div>
+
+  <div class="dc-plot">
+    <div class="dc-grid" aria-hidden="true">
+      {ticks.map((t) => (
+        <span class="dc-tick" style={`left:${(t / max) * 100}%`}>
+          <span class="dc-tick-label mono">{fmt(t)}</span>
+        </span>
+      ))}
+      <span class="dc-range" style={`left:${(lo / max) * 100}%; width:${((hi - lo) / max) * 100}%`}></span>
+    </div>
+
+    <ol class="dc-rows" role="list">
+      {data.map((d) => (
+        <li class:list={['dc-row', { 'is-hi': d.twh === hi, 'is-lo': d.twh === lo }]}>
+          <span class="dc-label">{d.source}</span>
+          <span class="dc-track">
+            <span class="dc-bar" style={`--w:${(d.twh / max) * 100}%`}></span>
+            <span class="dc-value mono">{fmt(d.twh)} TWh</span>
+          </span>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <figcaption class="dc-caption">
+    <span class="dc-fig mono">Fig. 1</span>
+    Forecasts for 2030 range from {fmt(lo)} TWh to {fmt(hi)} TWh, a roughly 2× spread (shaded band). Originally
+    built in Matplotlib (Python); redrawn for this site from the same values.
+  </figcaption>
+</figure>
+
+<style>
+  .dc-chart {
+    --bar: var(--cat-energy, #F5B544);
+    margin: var(--space-8) 0;
+    padding: var(--space-6);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .dc-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-6); }
+  .dc-title { margin: 0; font-size: var(--text-base); font-weight: 600; color: var(--text); }
+  .dc-sub { margin: 0; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--text-faint); }
+
+  /* Plot area: labels column + bar column; grid sits under the bar column only */
+  .dc-plot { position: relative; --label-w: 11.5rem; padding-bottom: var(--space-6); }
+  .dc-grid {
+    position: absolute; top: 0; bottom: 0;
+    left: var(--label-w); right: 5.5rem;
+  }
+  .dc-tick { position: absolute; top: 0; bottom: var(--space-6); width: 1px; background: var(--border); }
+  .dc-tick-label {
+    position: absolute; bottom: calc(-1 * var(--space-6)); transform: translateX(-50%);
+    font-size: 0.68rem; color: var(--text-faint); white-space: nowrap;
+  }
+  .dc-range {
+    position: absolute; top: 0; bottom: var(--space-6);
+    background: color-mix(in srgb, var(--bar) 7%, transparent);
+    border-left: 1px dashed color-mix(in srgb, var(--bar) 45%, transparent);
+    border-right: 1px dashed color-mix(in srgb, var(--bar) 45%, transparent);
+  }
+
+  .dc-rows { position: relative; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .dc-row { display: grid; grid-template-columns: var(--label-w) 1fr; align-items: center; margin: 0; }
+  .dc-label { font-size: var(--text-sm); color: var(--text-muted); padding-right: var(--space-4); }
+  .dc-track { display: flex; align-items: center; gap: var(--space-3); padding-right: 5.5rem; position: relative; }
+  .dc-bar {
+    display: block; flex: 0 0 auto; height: 22px; width: var(--w);
+    background: color-mix(in srgb, var(--bar) 55%, transparent);
+    border-radius: 0 3px 3px 0;
+    transform-origin: left; animation: dc-grow 0.9s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .dc-row.is-hi .dc-bar, .dc-row.is-lo .dc-bar { background: var(--bar); }
+  .dc-value { flex: 0 0 auto; font-size: 0.75rem; color: var(--text); white-space: nowrap; }
+  .dc-row.is-hi .dc-label, .dc-row.is-lo .dc-label { color: var(--text); }
+
+  @keyframes dc-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) { .dc-bar { animation: none; } }
+
+  .dc-caption {
+    margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border);
+    font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;
+  }
+  .dc-fig { color: var(--accent); margin-right: var(--space-2); }
+
+  /* Phone: label above each bar */
+  @media (max-width: 560px) {
+    .dc-chart { padding: var(--space-4); }
+    .dc-plot { --label-w: 0px; }
+    .dc-grid { left: 0; right: 4.75rem; }
+    .dc-row { grid-template-columns: 1fr; gap: 4px; }
+    .dc-label { padding-right: 0; font-size: var(--text-xs); }
+    .dc-track { padding-right: 4.75rem; }
+    .dc-bar { height: 16px; }
+  }
+</style>
