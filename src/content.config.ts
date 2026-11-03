@@ -22,6 +22,8 @@ const projects = defineCollection({
     visibility: z.string(),
     team: z.array(z.string()).optional(),
     cover: z.string(),
+    coverAlt: z.string().optional(),
+    ogImage: z.string().optional(),
     figures: z.array(
       z.object({
         src: z.string(),

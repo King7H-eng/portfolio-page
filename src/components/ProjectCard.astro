@@ -204,8 +204,13 @@ const catKey = category.toLowerCase().replace(/[^a-z]/g, '');
     border-color: rgba(94, 230, 176, 0.30);
     background: transparent;
   }
+  .cat-energy {
+    color: var(--cat-energy);
+    border-color: rgba(245, 181, 68, 0.30);
+    background: transparent;
+  }
   /* Fallback */
-  .cat-tag:not([class*="cat-engineering"]):not([class*="cat-data"]):not([class*="cat-finance"]) {
+  .cat-tag:not([class*="cat-engineering"]):not([class*="cat-data"]):not([class*="cat-finance"]):not([class*="cat-energy"]) {
     color: var(--text-muted);
     border-color: var(--border);
   }

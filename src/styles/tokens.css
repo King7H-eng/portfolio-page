@@ -15,6 +15,7 @@
   /* Category tag text colours */
   --cat-engineering: #7FB0FF;
   --cat-finance:     #5EE6B0;
+  --cat-energy:      #F5B544;
   --cat-data:        #C4A8FF;
 
   /* Typography */
@@ -73,4 +74,5 @@
   --color-cat-engineering: var(--cat-engineering);
   --color-cat-data:        var(--cat-data);
   --color-cat-finance:     var(--cat-finance);
+  --color-cat-energy:      var(--cat-energy);
 }
