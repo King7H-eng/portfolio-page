@@ -210,7 +210,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
         {moreFigures.length > 0 && (
           <section class="figures-section" aria-labelledby="figures-heading">
-            <h2 id="figures-heading">Figures</h2>
+            <h2 id="figures-heading">{data.figuresTitle}</h2>
             <div class="figures-grid">
               {moreFigures.map((fig, i) => (
                 <figure class="fig-item">
