@@ -1,0 +1,57 @@
+---
+// Leave `href` out to show a placeholder (no link, no file published).
+export interface Props { href?: string; title: string; meta: string; }
+const { href, title, meta } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const url = href ? `${base}${href.replace(/^\//, '')}` : null;
+---
+<aside class="pdf-card not-prose" aria-label="Full dissertation">
+  <div class="pdf-icon mono" aria-hidden="true">PDF</div>
+  <div class="pdf-body">
+    <p class="pdf-kicker mono">Full dissertation</p>
+    <p class="pdf-title">{title}</p>
+    <p class="pdf-meta mono">{meta}</p>
+  </div>
+  <div class="pdf-actions">
+    {url ? (
+      <>
+        <a class="pdf-btn pdf-primary mono" href={url} target="_blank" rel="noopener">Read PDF ↗</a>
+        <a class="pdf-btn mono" href={url} download>Download</a>
+      </>
+    ) : (
+      <span class="pdf-btn pdf-soon mono" aria-disabled="true">PDF coming soon</span>
+    )}
+  </div>
+</aside>
+<style>
+  .pdf-card {
+    display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-6); align-items: center;
+    margin: var(--space-10, 2.5rem) 0; padding: var(--space-6);
+    border: 1px solid var(--border-strong); border-radius: var(--radius-lg); background: var(--surface);
+  }
+  .pdf-icon {
+    width: 52px; height: 64px; display: grid; place-items: center;
+    border: 1px solid var(--border-strong); border-radius: 6px;
+    font-size: 0.7rem; letter-spacing: 0.08em; color: var(--accent);
+    background: linear-gradient(180deg, rgba(76,141,255,0.10), transparent);
+  }
+  .pdf-kicker { margin: 0 0 4px; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  .pdf-title { margin: 0; font-size: var(--text-base); font-weight: 600; color: var(--text); line-height: 1.35; }
+  .pdf-meta { margin: 6px 0 0; font-size: 0.72rem; color: var(--text-faint); }
+  .pdf-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .pdf-btn {
+    font-size: 0.75rem; padding: 8px 14px; border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--border-strong); color: var(--text); white-space: nowrap;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  .pdf-btn:hover { border-color: var(--accent); }
+  .pdf-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .pdf-primary:hover { filter: brightness(1.1); }
+  .pdf-soon { color: var(--text-faint); border-style: dashed; cursor: default; }
+  .pdf-soon:hover { border-color: var(--border-strong); }
+  .pdf-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 640px) {
+    .pdf-card { grid-template-columns: auto 1fr; }
+    .pdf-actions { grid-column: 1 / -1; }
+  }
+</style>
