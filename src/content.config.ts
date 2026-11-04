@@ -28,6 +28,7 @@ const projects = defineCollection({
     abstract: z.string().optional(),
     subtitle: z.string().optional(),
     showSummary: z.boolean().default(true),
+    figuresTitle: z.string().default('Figures'),
     showFacts: z.boolean().default(true),
     ogImage: z.string().optional(),
     figures: z.array(
