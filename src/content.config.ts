@@ -18,6 +18,7 @@ const projects = defineCollection({
     date: z.string().optional(),
     institution: z.string().optional(),
     category: z.string(),
+    extraCategories: z.array(z.string()).default([]),
     type: z.string(),
     visibility: z.string(),
     team: z.array(z.string()).optional(),

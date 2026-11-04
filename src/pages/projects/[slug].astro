@@ -92,7 +92,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
     <header class="project-header">
       <div class="wrap">
         <div class="project-meta">
-          <span class={`cat-badge mono cat-${catKey}`}>{data.category}</span>
+          {[data.category, ...data.extraCategories].map((c) => (
+            <span class={`cat-badge mono cat-${c.toLowerCase().replace(/[^a-z]/g, '')}`}>{c}</span>
+          ))}
           <span class="meta-type">{data.type}</span>
           {dateDisplay && (
             <>
@@ -479,7 +481,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     transition: border-color var(--transition-mid);
   }
   .fig-item:hover { border-color: rgba(76, 141, 255, 0.45); }
-  .fig-item .fig-open { aspect-ratio: 4 / 3; }
+  .fig-item .fig-open { aspect-ratio: 4 / 3; overflow: hidden; }
   .fig-item .fig-open img { height: 100%; object-fit: contain; }
 
   /* ── Prev / next ── */
