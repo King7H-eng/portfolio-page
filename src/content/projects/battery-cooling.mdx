@@ -18,6 +18,9 @@ tags:
 date: 2026-04
 institution: Durham University
 category: Engineering
+extraCategories:
+  - Energy
+  - Data
 type: Dissertation
 visibility: Full report
 cover: "/portfolio-page/figures/battery-cooling/cover-cell-string.svg"
@@ -25,12 +28,20 @@ coverAlt: "Diagram of the modelled pack: four rows of 15 coated battery cells, s
 ogImage: "/portfolio-page/figures/battery-cooling/cover-cell-string-og.png"
 coverPosition: "center"
 figures:
+  - src: "/portfolio-page/figures/battery-cooling/fig-ecm.png"
+    caption: "First-order Thévenin equivalent circuit used to model each cell's electrical behaviour. R₀ is the ohmic resistance and the parallel R₁–C₁ branch captures transient polarisation; both resistances vary with temperature."
+  - src: "/portfolio-page/figures/battery-cooling/fig-radial-domain.png"
+    caption: "Cross-section of the 1D radial heat-conduction model of a single cell: the heat-generating jellyroll, the steel can, and the MOF-801 coating acting as a heat sink."
   - src: "/portfolio-page/figures/battery-cooling/fig-coated-vs-uncoated.png"
     caption: "Cell surface temperature: uncoated vs MOF-801 coated cell during fast charging (I = 5.2 A). Peak temperature reduced by 30.5%."
   - src: "/portfolio-page/figures/battery-cooling/fig-pack-temperatures.png"
     caption: "Cell surface temperatures at positions 1, 5, 10 and 15 in the 15-cell string. The coating narrows the spread between cells by 43.2%."
+  - src: "/portfolio-page/figures/battery-cooling/fig-heat-removed.png"
+    caption: "Cumulative heat extracted by the MOF-801 coating at cell positions 1, 5, 10 and 15. Cells further from the inlet desorb more strongly: Cell 15 redistributes 1.7× as much heat as Cell 1."
   - src: "/portfolio-page/figures/battery-cooling/fig-sensitivity.png"
     caption: "Peak temperature reduction [%] per cell at varying airflow speeds. Above 1 m/s the coating's insulating effect dominates and performance turns negative."
+  - src: "/portfolio-page/figures/battery-cooling/fig-oat-sensitivity.png"
+    caption: "One-at-a-time sensitivity analysis: peak surface temperature (top) and maximum temperature difference across the string (bottom) against inlet relative humidity, at four ambient temperatures (I = 5.2 A, U = 0.25 m/s)."
 ---
 
 import PdfCard from '../../components/PdfCard.astro';

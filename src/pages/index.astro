@@ -125,6 +125,7 @@ const projects = ORDER
                 metrics={project.data.metrics}
                 tags={project.data.tags}
                 category={project.data.category}
+                extraCategories={project.data.extraCategories}
                 type={project.data.type}
                 cover={project.data.cover}
                 coverPosition={project.data.coverPosition}
@@ -164,7 +165,7 @@ const projects = ORDER
       btns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       cards.forEach((card) => {
-        card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+        card.style.display = (filter === 'all' || (card.dataset.category ?? '').split(' ').includes(filter)) ? '' : 'none';
       });
     });
   });
