@@ -51,6 +51,7 @@ const dateDisplay = formatDate(data.date);
 const coverIsFigure = data.figures.some((f) => f.src === data.cover);
 const [leadFigure, ...moreFigures] = coverIsFigure ? data.figures : [null, ...data.figures];
 const coverPhoto = !coverIsFigure && data.cover ? data.cover : null;
+const figOffset = leadFigure ? 2 : 1;
 
 const facts = [
   { label: 'Type', value: data.type },
@@ -102,7 +103,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
         </div>
 
         <h1 class="project-title">{data.title}</h1>
-        {data.abstract ? (
+        {data.subtitle && <p class="project-subtitle">{data.subtitle}</p>}
+        {!data.showSummary ? null : data.abstract ? (
           <div class="project-abstract">
             <p class="abstract-label mono">Abstract</p>
             <p class="project-summary">{data.abstract}</p>
@@ -210,11 +212,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
             <div class="figures-grid">
               {moreFigures.map((fig, i) => (
                 <figure class="fig-item">
-                  <button class="fig-open" type="button" data-src={fig.src} data-caption={fig.caption} aria-label={`Enlarge figure ${i + 2}`}>
+                  <button class="fig-open" type="button" data-src={fig.src} data-caption={fig.caption} aria-label={`Enlarge figure ${i + figOffset}`}>
                     <img src={fig.src} alt={fig.caption} loading="lazy" decoding="async" />
                   </button>
                   <figcaption class="fig-caption">
-                    <span class="fig-num mono">Fig. {i + 2}</span>
+                    <span class="fig-num mono">Fig. {i + figOffset}</span>
                     {fig.caption}
                   </figcaption>
                 </figure>
@@ -365,6 +367,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
   .abstract-label {
     font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--accent); margin: 0 0 var(--space-2);
+  }
+  .project-subtitle {
+    font-size: var(--text-lg); color: var(--text-muted); font-style: italic;
+    max-width: 60ch; line-height: 1.5; margin: calc(-1 * var(--space-2)) 0 var(--space-6); text-wrap: balance;
   }
   .project-summary {
     font-size: var(--text-lg); color: var(--text-muted);

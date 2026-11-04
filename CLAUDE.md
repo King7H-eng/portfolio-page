@@ -33,8 +33,10 @@ Projects (in this order):
    If something is missing, render a visible TODO and list it in your step report. Never fill
    the gap yourself.
 2. Ignore grey placeholder text in the source pages ("Add your part", "Not stated").
-3. The dissertation and statistics report are "Summary only": summaries and selected figures,
-   no full PDFs and no code.
+3. The statistics report is "Summary only": summaries and selected figures, no full PDF and no code.
+   The dissertation page carries a short description, the grade, selected figures and no code. The full PDF
+   is NOT published yet: the PDF card is a placeholder until Nic confirms supervisor approval (Nov 2026).
+   Never commit the dissertation PDF to this public repo without that confirmation.
 4. Credit teams on group work. eVTOL team: Henry Allen, Nicholas Mommsen, George Lythgoe,
    Frederick Bicknell, Jack Pitman.
 5. Keep the plain-English wording for the battery-coating chemistry; maths and numerical-methods
