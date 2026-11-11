@@ -29,7 +29,8 @@ const projects = defineCollection({
     subtitle: z.string().optional(),
     showSummary: z.boolean().default(true),
     figuresTitle: z.string().default('Figures'),
-    showMetrics: z.boolean().default(false), // headline numbers on the project page + metrics/skills on the home card
+    showMetrics: z.boolean().default(false), // headline numbers on the project page (and on the home card)
+    cardMetrics: z.boolean().default(false), // headline numbers on the home card only
     showFacts: z.boolean().default(true),
     ogImage: z.string().optional(),
     figures: z.array(
