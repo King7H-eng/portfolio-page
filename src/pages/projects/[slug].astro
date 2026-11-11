@@ -118,7 +118,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     </header>
 
     <!-- Metrics band -->
-    {data.metrics.length > 0 && (
+    {data.showMetrics && data.metrics.length > 0 && (
       <section class="metrics-band" aria-label="Key metrics">
         <dl class="wrap metrics-inner">
           {data.metrics.map((m) => (
@@ -133,7 +133,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
     <!-- Cover photo banner -->
     {coverPhoto && (
-      <div class="wrap cover-photo-wrap">
+      <div class:list={["wrap cover-photo-wrap", { "no-band": !(data.showMetrics && data.metrics.length > 0) }]}>
         <div class="cover-photo">
           <img src={coverPhoto} alt={data.coverAlt ?? ''} style={data.coverPosition ? `object-position:${data.coverPosition}` : undefined} loading="eager" decoding="async" fetchpriority="high" />
         </div>
@@ -416,6 +416,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   .lead-figure-wrap { padding-top: var(--space-12); }
 
   .cover-photo-wrap { padding-top: var(--space-12); }
+  .cover-photo-wrap.no-band { padding-top: 0; }
   .cover-photo {
     border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
     aspect-ratio: 21 / 8; background: var(--surface);

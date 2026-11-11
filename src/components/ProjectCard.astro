@@ -68,14 +68,6 @@ const allCats = [category, ...extraCategories];
       </div>
     )}
 
-    <!-- Tags / skills -->
-    {showDetails && tags.length > 0 && (
-      <div class="card-tags mono" aria-label="Skills and tools">
-        {tags.slice(0, 5).map((tag, i) => (
-          <span class="tag">{tag}{i < Math.min(tags.length, 5) - 1 ? ' ·' : ''}</span>
-        ))}
-      </div>
-    )}
 
     <!-- Read more -->
     <a href={href} class="card-cta mono" aria-label={`Read more: ${title}`}>
@@ -258,7 +250,6 @@ const allCats = [category, ...extraCategories];
     gap: var(--space-6);
     padding: var(--space-4) 0;
     border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
   }
 
@@ -284,12 +275,6 @@ const allCats = [category, ...extraCategories];
   }
 
   /* ── Tags / skills ────────────────────────── */
-  .card-tags {
-    font-size: var(--text-xs);
-    color: var(--text-faint);
-    letter-spacing: 0.03em;
-    line-height: 1.6;
-  }
 
   /* ── Read more ────────────────────────────── */
   .card-cta {
