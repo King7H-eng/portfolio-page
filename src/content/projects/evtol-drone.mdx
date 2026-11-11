@@ -26,12 +26,6 @@ institution: Durham University
 category: Engineering
 type: Group project
 visibility: Fully public
-team:
-  - Henry Allen
-  - Nicholas Mommsen
-  - George Lythgoe
-  - Frederick Bicknell
-  - Jack Pitman
 cover: "/portfolio-page/figures/evtol-drone/cover-assembly.webp"
 coverAlt: "The completed 3D-printed Eclipson tail-sitter eVTOL drone, with blue and grey wings, standing on its tail"
 coverPosition: "center 55%"
@@ -57,9 +51,7 @@ import PdfCard from '../../components/PdfCard.astro';
 
 A five-person group project at Durham University to build a 3D-printed tail-sitter eVTOL drone, designed to take off vertically and cruise as a fixed-wing aircraft on autonomous wildlife-monitoring and anti-poaching patrols. The project covered the airframe build and the integration of the flight controller, power and navigation hardware, followed by flight testing and crash analysis. Autonomous patrol missions were scripted in Lua and tested in a Mission Planner simulation, and the project closed with a critical review of the design and recommendations for future development.
 
-**My role:** team leader and drone pilot. Through the project I became an A2 CofC qualified drone pilot.
-
-Team: Henry Allen, Nicholas Mommsen, George Lythgoe, Frederick Bicknell, Jack Pitman.
+**My role:** Team leader and drone pilot. Through the project I became an A2 CofC qualified drone pilot.
 
 <PdfCard
   kicker="Full report"
@@ -80,6 +72,8 @@ During the test flight we encountered minor errors surrounding hardware, GPS cal
 
 Recommendations were made for improvements to both the design, and the build process. These included suggestions to improve the strength, feasibility and performance of the drone.
 
+The total cost of the drone's components was £512.28.
+
 ## Technical methods
 
 | Method | How it was used |
@@ -94,22 +88,3 @@ Recommendations were made for improvements to both the design, and the build pro
 | **Control tuning (planned)** | FFT vibration analysis to set notch filters, then Quik Tune and AutoTune for the PID gains |
 | **Test planning** | Proposed transition, efficiency and repeatability tests, with flight paths compared against the programmed route by RMS error |
 
-## Bill of materials
-
-| Component | Qty | Cost per unit |
-|---|---:|---:|
-| Holybro PM06 V2-14S Micro Power Module | 1 | £19.98 |
-| Holybro Pixhawk 6C Autopilot Kit PX4 Flight Controller | 1 | £99.72 |
-| GPS | 1 | £43.99 |
-| Receiver | 1 | £38.99 |
-| Telemetry radio | 1 | £56.00 |
-| AIR 20A 3-4S Multi-Rotor UAV Drone ESC | 2 | £71.40 |
-| AIR 2216 motor | 2 | £18.79 |
-| Power splitter | 1 | £5.00 |
-| UBEC DC-DC buck converter | 1 | £10.00 |
-| EMAX Servo | 2 | £7.99 |
-| Carbon rod | 1 | £5.99 |
-| D1.2 rod | 4 | £1.25 |
-| 2300Ah battery | 1 | £20.75 |
-| PLA | – | £10.50 |
-| **Total (calculated from the table)** | | **£512.28** |

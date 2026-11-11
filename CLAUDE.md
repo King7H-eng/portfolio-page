@@ -37,8 +37,9 @@ Projects (in this order):
    The dissertation page carries a short description, the grade, selected figures and no code. The full PDF
    is NOT published yet: the PDF card is a placeholder until Nic confirms supervisor approval (Nov 2026).
    Never commit the dissertation PDF to this public repo without that confirmation.
-4. Credit teams on group work. eVTOL team: Henry Allen, Nicholas Mommsen, George Lythgoe,
-   Frederick Bicknell, Jack Pitman.
+4. Make group work clear (e.g. "five-person group project") and never present team results as Nic's
+   alone. Teammates' names are not listed on the eVTOL page (Nic's decision, Nov 2026); they remain
+   in the linked report.
 5. Keep the plain-English wording for the battery-coating chemistry; maths and numerical-methods
    terms are fine.
 6. No AI-generated images. All visuals are either real figures from the source reports or built

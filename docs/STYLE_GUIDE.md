@@ -78,13 +78,13 @@ student blog, not a sales page.
 - A number I calculated (for example a total) is labelled "calculated".
 - Verbatim excerpts (abstracts, executive summaries) are copied word for word; only clear typos
   are fixed. Report any fix to Nic.
-- Group projects list the full team on the page.
+- Group projects say they were group work and how big the team was; never present team results as mine alone.
 
 ## 7. Page template (so every project reads the same way)
 
 1. Header: category tags, type, date, title, original document title as subtitle
 2. Cover image (real photo or code-drawn; no AI images)
-3. **About this project**: neutral description (2–3 sentences), then **My role** (I), then team or supervisor credits
+3. **About this project**: neutral description (2–3 sentences), then **My role** (I), then supervisor credits where relevant
 4. Full document card (PDF link, or "available on request")
 5. Abstract or executive summary from the source, verbatim
 6. Optional: technical methods table, data table
