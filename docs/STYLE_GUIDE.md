@@ -94,7 +94,7 @@ student blog, not a sales page.
 
 ## Current inconsistencies to fix
 
-Found in an audit on 11 November 2026. None of these have been changed yet.
+Found in an audit on 11 November 2026. Items 1–5 and 9 fixed on 11 November 2026; items 6–8 (statistics) deliberately left for now.
 
 | # | Where | Issue | Suggested fix |
 |---|---|---|---|
