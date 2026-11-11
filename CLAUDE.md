@@ -44,6 +44,11 @@ Projects (in this order):
 6. No AI-generated images. All visuals are either real figures from the source reports or built
    in code (CSS/SVG).
 
+## Writing style
+All site copy follows docs/STYLE_GUIDE.md (voice and person, tense, tone, lengths, British
+spelling, number and date formats, and the project page template). Read it before writing or
+editing any text.
+
 ## Tech stack
 - Astro (latest stable; pin exact versions in package.json). Use the astro-docs MCP for
   current APIs; don't rely on memory.
