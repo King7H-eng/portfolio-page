@@ -48,9 +48,9 @@ import SystemDiagram from '../../components/evtol/SystemDiagram.astro';
 
 ## About this project
 
-A five-person group project at Durham University to build a 3D-printed tail-sitter eVTOL drone, designed to take off vertically and cruise as a fixed-wing aircraft on autonomous wildlife-monitoring and anti-poaching patrols. The project covered the airframe build and the integration of the flight controller, power and navigation hardware, followed by flight testing and crash analysis. Autonomous patrol missions were scripted in Lua and tested in a Mission Planner simulation, and the project closed with a critical review of the design and recommendations for future development.
+A five-person group project at Durham University to build a 3D-printed Eclipson tail-sitter eVTOL drone: a long-range, efficient and low-noise aircraft, designed to take off vertically and cruise as a fixed-wing aircraft on autonomous wildlife-monitoring and anti-poaching patrols, without the need for a runway. The project covered the airframe build and the integration of the flight controller, power and navigation hardware, followed by flight testing and crash analysis. Autonomous patrol missions were scripted in Lua and tested in a Mission Planner simulation. The drone's components cost £512.28 in total.
 
-The drone did not complete a successful flight: on the first attempt its wire feet caught in the grass and it tipped over, and on the second it flipped as the throttle increased, damaging the wings beyond repair. The report attributes this to structural limitations, notably weak glued wing–fuselage joints, and to a heavier supplied battery that left the elevons too little authority to correct imbalances.
+The drone did not complete a successful flight: on the first attempt its wire feet caught in the grass and it tipped over, and on the second it flipped as the throttle increased, damaging the wings beyond repair. The report attributes this to structural limitations, notably weak glued wing–fuselage joints, and to a heavier supplied battery that left the elevons too little authority to correct imbalances. Repairs were slow, as a single break meant reprinting a whole wing, which left little time to troubleshoot GPS calibration and electromagnetic interference issues. The project closed with a critical review and recommendations to improve the drone's strength, feasibility and performance.
 
 **My role:** Team leader and drone pilot. Through the project I qualified as a drone pilot with the UK CAA's A2 Certificate of Competency (A2 CofC).
 
@@ -61,19 +61,6 @@ The drone did not complete a successful flight: on the first attempt its wire fe
   meta="Group report · Durham University · June 2025 · 10 pages"
 />
 
-## Executive summary
-
-This Report covers the construction and analysis of a fixed-wing eVTOL platform designed by Eclipson. The aim of the project was to build a long-range and efficient low-noise aircraft, capable of conducting patrols of a reserve without the need for a runway.
-
-The design features a tail-sitter VTOL configuration for vertical take-off and fixed-wing cruise. The drone's airframe was fabricated using 3D printers, and all other parts and equipment were supplied by Durham University. Both Mission Planner and LUA code were used to integrate the software into the platform, providing autonomous capabilities. Despite correctly adhering to the set-up guide, published by Eclipson, multiple structural limitations stopped us from achieving the goal of transitioning to fixed-wing cruise flight.
-
-Specifically, weaknesses between the wings and fuselage that resulted in difficulty to land without the drone suffering significant damage. Large time delays came as a consequence of the entire wing being re-printed. This made it hard to troubleshoot calibration and sensitivity issues in the given time frame.
-
-During the test flight we encountered minor errors surrounding hardware, GPS calibration and electromagnetic interference. Alone, these were reparable issues, but due to a lack of repairability, the iterative troubleshooting process took longer than expected.
-
-Recommendations were made for improvements to both the design, and the build process. These included suggestions to improve the strength, feasibility and performance of the drone.
-
-The total cost of the drone's components was £512.28.
 
 ## System architecture
 
