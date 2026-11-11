@@ -45,12 +45,22 @@ figures:
 
 import PdfCard from '../../components/PdfCard.astro';
 import SystemDiagram from '../../components/evtol/SystemDiagram.astro';
+import VideoFigure from '../../components/VideoFigure.astro';
 
 ## About this project
 
 A five-person group project at Durham University to build a 3D-printed Eclipson tail-sitter eVTOL drone: a long-range, efficient and low-noise aircraft, designed to take off vertically and cruise as a fixed-wing aircraft on autonomous wildlife-monitoring and anti-poaching patrols, without the need for a runway. The project covered the airframe build and the integration of the flight controller, power and navigation hardware, followed by flight testing and crash analysis. Autonomous patrol missions were scripted in Lua and tested in a Mission Planner simulation. The drone's components cost £512.28 in total.
 
 The drone did not complete a successful flight: on the first attempt its wire feet caught in the grass and it tipped over, and on the second it flipped as the throttle increased, damaging the wings beyond repair. The report attributes this to structural limitations, notably weak glued wing–fuselage joints, and to a heavier supplied battery that left the elevons too little authority to correct imbalances. Repairs were slow, as a single break meant reprinting a whole wing, which left little time to troubleshoot GPS calibration and electromagnetic interference issues. The project closed with a critical review and recommendations to improve the drone's strength, feasibility and performance.
+
+<VideoFigure
+  src="/figures/evtol-drone/flight-attempt.mp4"
+  poster="/figures/evtol-drone/flight-attempt-poster.webp"
+  width={1280}
+  height={494}
+  label="Video of an unsuccessful take-off attempt"
+  caption="An unsuccessful take-off attempt: the drone tips over onto the landing pad as it tries to lift off, and the team recovers it."
+/>
 
 **My role:** Team leader and drone pilot. Through the project I qualified as a drone pilot with the UK CAA's A2 Certificate of Competency (A2 CofC).
 

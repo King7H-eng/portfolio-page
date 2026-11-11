@@ -1,0 +1,43 @@
+---
+// Click-to-play video figure: nothing downloads until the viewer presses play.
+export interface Props { src: string; poster: string; caption: string; label: string; width?: number; height?: number; }
+const { src, poster, caption, label, width, height } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const url = (p: string) => (p.startsWith(base) ? p : `${base}${p.replace(/^\//, '')}`);
+---
+<figure class="video-fig not-prose">
+  <video
+    controls
+    muted
+    playsinline
+    preload="none"
+    poster={url(poster)}
+    width={width}
+    height={height}
+    aria-label={label}
+  >
+    <source src={url(src)} type="video/mp4" />
+  </video>
+  <figcaption class="video-cap">
+    <span class="video-tag mono">Video</span>
+    {caption}
+  </figcaption>
+</figure>
+<style>
+  .video-fig {
+    margin: var(--space-6) 0 var(--space-8);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .video-fig video { display: block; width: 100%; height: auto; background: #000; }
+  .video-cap {
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .video-tag { color: var(--accent); margin-right: var(--space-2); }
+</style>
