@@ -1,24 +1,27 @@
 ---
-title: "eVTOL tail-sitter drone for anti-poaching patrol"
+title: "eVTOL drone for autonomous missions"
 slug: evtol-drone
-summary: "Five-person team built a 3D-printed Eclipson tail-sitter eVTOL for wildlife-reserve patrols. Scripted autonomous patrol logic in Lua on ArduPilot (simulation-tested), then diagnosed two failed take-offs to drive design improvements."
+summary: "A five-person group project, which I led as team leader and pilot, to build a 3D-printed tail-sitter eVTOL drone for autonomous wildlife-monitoring and anti-poaching patrols."
+subtitle: "Eclipson eVTOL Drone Build for Wildlife Monitoring and Anti-Poaching Patrol"
+showSummary: false
+showFacts: false
+figuresTitle: "Build and testing"
 metrics:
-  - value: "£10.50"
-    label: "Total filament cost"
-    source: "Filament cost £10.50; bill of materials compiled for all components (Table I) — source: 03-evtol-drone.md, Methodology section 2"
-  - value: "£1.80"
-    label: "Cost per wing reprint"
-    source: "glued parts meant one break required reprinting a whole wing (£1.80 per wing) — source: 03-evtol-drone.md, Results section"
-  - value: "2–3×"
-    label: "Flight-time advantage of eVTOL vs quadcopter"
-    source: "Fixed-wing eVTOLs combine vertical take-off with long-range, low-noise, efficient cruise, often 2–3× the flight time of a quadcopter — source: 03-evtol-drone.md, Context section"
+  - value: "5"
+    label: "Team members, as team leader"
+    source: "Team of five (report author list); Nic led the team — source: Nic, 11 Nov 2026"
+  - value: "A2 CofC"
+    label: "Drone pilot qualification gained"
+    source: "Nic became an A2 CofC qualified drone pilot — source: Nic, 11 Nov 2026"
 tags:
-  - ArduPilot
+  - Team leadership
   - Lua
+  - ArduPilot
+  - Mission Planner
   - 3D printing
-  - Control systems
-  - Electronics & power
-date: "TODO"
+  - Electronic design
+  - Flight testing
+date: "2025-06"
 institution: Durham University
 category: Engineering
 type: Group project
@@ -29,106 +32,84 @@ team:
   - George Lythgoe
   - Frederick Bicknell
   - Jack Pitman
-cover: "/portfolio-page/figures/evtol-drone/fig-assembly.jpg"
+cover: "/portfolio-page/figures/evtol-drone/cover-assembly.webp"
+coverAlt: "The completed 3D-printed Eclipson tail-sitter eVTOL drone, with blue and grey wings, standing on its tail"
+coverPosition: "center 55%"
+ogImage: "/portfolio-page/figures/evtol-drone/cover-assembly-og.jpg"
 figures:
-  - src: "/portfolio-page/figures/evtol-drone/fig-assembly.jpg"
-    caption: "The completed Eclipson tail-sitter eVTOL, assembled from 3D-printed parts. Total filament cost: £10.50."
-  - src: "/portfolio-page/figures/evtol-drone/fig-hardware.jpg"
-    caption: "Avionics installed in the fuselage: Holybro Pixhawk 6C Mini flight controller, LiPo battery, ESCs and GPS module."
-  - src: "/portfolio-page/figures/evtol-drone/fig-wing-damage.jpg"
-    caption: "Wing damage after Flight 2. Taking off from a metal plate, the drone flipped backwards and sideways on throttle-up, breaking the wings beyond repair."
-  - src: "/portfolio-page/figures/evtol-drone/fig-simulation.png"
-    caption: "Mission Planner simulation of the autonomous patrol script: lawnmower-pattern passes between four GPS waypoints above Kruger National Park, then return to home."
+  - src: "/portfolio-page/figures/evtol-drone/fig-hardware-assembly.webp"
+    caption: "Complete hardware assembly inside the fuselage: flight controller, power distribution, ESCs, GPS and battery."
+  - src: "/portfolio-page/figures/evtol-drone/fig-fft-vibration.webp"
+    caption: "Comparison of vibrations before (blue) and after (orange) FFT notch filters. Notch filters, set from an FFT of logged vibration data, remove motor and airframe noise so the flight controller reads the drone's motion more accurately."
+  - src: "/portfolio-page/figures/evtol-drone/fig-lua-takeoff.webp"
+    caption: "Extract from the Lua script for autonomous take-off: climb to the take-off altitude, record home position and heading, then switch to guided mode."
+  - src: "/portfolio-page/figures/evtol-drone/fig-transition.webp"
+    caption: "Illustration of the hover-to-fixed-wing transition with the relevant parameters (Q_TAILSIT_ANGLE at rotation ratio Q_TAILSIT_RAT_FW), tuned by experiment."
+  - src: "/portfolio-page/figures/evtol-drone/fig-simulation.webp"
+    caption: "Mission Planner simulation of a repeatable circular path, used while developing the autonomous patrol scripts."
+  - src: "/portfolio-page/figures/evtol-drone/fig-wing-damage.webp"
+    caption: "Wing damage after the second flight. Taking off from a metal plate, the drone flipped backwards and to the side on throttle-up, damaging the wings beyond repair."
 ---
+
+import PdfCard from '../../components/PdfCard.astro';
+
+## About this project
+
+A five-person group project at Durham University to build a 3D-printed tail-sitter eVTOL drone, designed to take off vertically and cruise as a fixed-wing aircraft on autonomous wildlife-monitoring and anti-poaching patrols. The project covered the airframe build and the integration of the flight controller, power and navigation hardware, followed by flight testing and crash analysis. Autonomous patrol missions were scripted in Lua and tested in a Mission Planner simulation, and the project closed with a critical review of the design and recommendations for future development.
+
+**My role:** team leader and drone pilot. Through the project I became an A2 CofC qualified drone pilot.
+
+Team: Henry Allen, Nicholas Mommsen, George Lythgoe, Frederick Bicknell, Jack Pitman.
+
+<PdfCard
+  kicker="Full report"
+  href="/Eclipson-eVTOL-Drone-Report-2025.pdf"
+  title="Eclipson eVTOL Drone Build for Wildlife Monitoring and Anti-Poaching Patrol"
+  meta="Group report · Durham University · June 2025 · 10 pages"
+/>
 
 ## Executive summary
 
-The aim was an easy-to-launch, efficient, low-noise, long-range aerial platform for surveying conservation areas with minimal user input. Our five-person team built a 3D-printed Eclipson fixed-wing eVTOL in a tail-sitter configuration, which takes off vertically and cruises as a fixed-wing aircraft. We set it up on ArduPilot with Mission Planner and wrote Lua scripts for an autonomous patrol mission, tested in simulation.
+This Report covers the construction and analysis of a fixed-wing eVTOL platform designed by Eclipson. The aim of the project was to build a long-range and efficient low-noise aircraft, capable of conducting patrols of a reserve without the need for a runway.
 
-Structural limitations stopped the drone reaching fixed-wing cruise. Weakness between the wings and fuselage made it hard to land without significant damage, and reprinting a whole wing caused long delays. In testing, we also hit hardware, GPS calibration and electromagnetic interference issues. The report closes with recommendations to improve the drone's strength, feasibility and performance.
+The design features a tail-sitter VTOL configuration for vertical take-off and fixed-wing cruise. The drone's airframe was fabricated using 3D printers, and all other parts and equipment were supplied by Durham University. Both Mission Planner and LUA code were used to integrate the software into the platform, providing autonomous capabilities. Despite correctly adhering to the set-up guide, published by Eclipson, multiple structural limitations stopped us from achieving the goal of transitioning to fixed-wing cruise flight.
 
-## Context
+Specifically, weaknesses between the wings and fuselage that resulted in difficulty to land without the drone suffering significant damage. Large time delays came as a consequence of the entire wing being re-printed. This made it hard to troubleshoot calibration and sensitivity issues in the given time frame.
 
-Traditional reserve monitoring (ranger patrols, helicopters) is expensive, slow and limited in coverage. Quadcopters have short flight times and range. Fixed-wing eVTOLs combine vertical take-off with long-range, low-noise, efficient cruise, often 2–3× the flight time of a quadcopter.
+During the test flight we encountered minor errors surrounding hardware, GPS calibration and electromagnetic interference. Alone, these were reparable issues, but due to a lack of repairability, the iterative troubleshooting process took longer than expected.
 
-## My role
+Recommendations were made for improvements to both the design, and the build process. These included suggestions to improve the strength, feasibility and performance of the drone.
 
-TODO (team of 5; the report doesn't say who did what).
+## Technical methods
 
-## Methodology
+| Method | How it was used |
+|---|---|
+| **3D printing** | Airframe printed in PLA from the Eclipson design and bonded with cyanoacrylate; carbon rods reinforce the fuselage and vertical stabiliser |
+| **Electronic design and power distribution** | LiPo battery feeding a power distribution board through a splitter; two ESCs regulating the motors; a buck converter powering the servo rail |
+| **Flight controller integration** | Holybro Pixhawk 6C Mini connected to the RC receiver, telemetry radio, GPS (over UART), ESCs and servos via PWM |
+| **ArduPilot** | ArduPlane firmware with VTOL enabled (Q_ENABLE) and tail-sitter parameters set for take-off, hover and transition |
+| **Mission Planner** | Ground control: calibration, flight modes, GPS waypoint missions, flight logging and simulation |
+| **Lua scripting** | Autonomous pre-arm checks, take-off, hover-to-fixed-wing (FBWA) transition, and lawnmower patrol passes between four waypoints in Kruger National Park, then return to home |
+| **Flight testing and crash analysis** | Ground checks in manual mode, two test flights, then diagnosis from flight footage and logs |
+| **Control tuning (planned)** | FFT vibration analysis to set notch filters, then Quik Tune and AutoTune for the PID gains |
+| **Test planning** | Proposed transition, efficiency and repeatability tests, with flight paths compared against the programmed route by RMS error |
 
-**1. Business case.** Set out the problem for conservation teams and the advantages of eVTOLs over quadcopters and fixed-wing aircraft. Also covered other uses: river water sampling, package delivery, powerline inspection.
+## Bill of materials
 
-**2. Airframe build**
-- 3D-printed parts assembled with cyanoacrylate glue, following Eclipson's instructions
-- Carbon rods in the fuselage and vertical stabiliser
-- Elevons driven by servos
-- Filament cost £10.50; bill of materials compiled for all components (Table I)
-
-**3. Hardware integration**
-- Holybro Pixhawk 6C Mini flight controller
-- Power distribution board fed through a splitter from the LiPo battery
-- Two ESCs taking PWM throttle signals
-- Buck converter powering the servo rail
-- GPS over UART, telemetry radio and RC receiver
-
-**4. Ground control.** Mission Planner on ArduPilot, with patrol routes programmed as GPS waypoints.
-
-**5. Flight testing**
-- Ground checks in manual mode (flaps, trim, RC inputs) with full logging enabled
-- Two flight attempts, then crash analysis from footage and logs
-
-**6. Proposed testing** (planned but not reached):
-- **Hover tuning:** FFT vibration analysis to set notch filters, then Quik Tune and AutoTune
-- **Transition testing:** time and altitude change
-- **Efficiency testing:** hover-only vs transition flights on a full battery, to test Eclipson's claim of triple the distance
-- **Repeatability testing:** RMS error of flight paths against the programmed route
-
-**7. Lua scripting** (Mission Planner simulation, ArduPlane with Q_ENABLE)
-- Automated pre-arm checks, then arming and take-off to a set altitude
-- Hover-to-FBWA transition, with tail-sit angle and angular rates tuned by experiment
-- Lawnmower-style passes between four waypoints in Kruger National Park, with a loop counter, then return to home
-- Noted limitation: simulation used pre-tuned PIDs, so real flight would need a quick-tune script
-
-**8. Critical review.** Reviewed the structure, the hardware set-up and the build process, considered alternative eVTOL configurations, and made recommendations.
-
-## Results
-
-- **Flight 1:** the wire feet got stuck in grass and moss, and the drone pivoted over (undamaged)
-- **Flight 2:** taking off from a metal plate, the drone flipped backwards and sideways on throttle-up, damaging the wings beyond repair. The logs didn't capture desired pitch, so that couldn't be ruled out as the cause.
-- **Design flaws identified:**
-  - Wing–fuselage joint glued with minimal overlap and no spar
-  - Single-wall-loop prints
-  - Thin landing legs
-  - The supplied hardware differed from the design: a separate flight controller and power board, which made level mounting difficult, and a larger battery, which affected weight distribution
-  - High-current wires close to the flight controller and GPS, likely causing accelerometer calibration errors
-- **Process issues:**
-  - Glued parts meant one break required reprinting a whole wing (£1.80 per wing)
-  - Limited printer access
-  - First-layer adhesion problems
-  - The airstrip was a 20-minute drive away
-  - Weather grounded the drone on several days
-- **Recommendations:**
-  - Carbon-fibre composites and rods through the wing–fuselage joint
-  - A modular airframe
-  - More rigid legs
-  - LiDAR, optical flow and redundant barometric sensors, plus imaging
-  - Smart battery management
-  - For a complete redesign, a conventional VTOL with multi-rotor lift and a dedicated cruise motor
-- **Future development:** live video via a VTX or digital link, and a Python/OpenCV program to detect poachers and alert authorities with their location
-
-## Transferable skills
-
-| Skill | How it shows up here | Where it transfers |
-|---|---|---|
-| Business case | Defined the user problem, the alternatives and other applications for eVTOL drones | Consulting, commercial assessment |
-| Critical review and failure analysis | Identified the structural, hardware and process causes behind the failed tests | Post-mortems, operational due diligence |
-| Systems integration | Connected the power, control, sensor and communication hardware | Understanding complex products (aerospace and defence) |
-| Scripting (Lua) | Autonomous mission logic tested in simulation | Automation, coding |
-| Test planning | Proposed tests with defined metrics (RMS path error, range comparison) | Designing analyses with measurable criteria |
-| Cost awareness | Bill of materials and per-wing reprint cost | Cost modelling |
-| Teamwork under time constraints | Five-person build working against strict time limits | Deal and project teams |
-
-## Credits
-
-Team: Henry Allen, Nicholas Mommsen, George Lythgoe, Frederick Bicknell, Jack Pitman.
+| Component | Qty | Cost per unit |
+|---|---:|---:|
+| Holybro PM06 V2-14S Micro Power Module | 1 | £19.98 |
+| Holybro Pixhawk 6C Autopilot Kit PX4 Flight Controller | 1 | £99.72 |
+| GPS | 1 | £43.99 |
+| Receiver | 1 | £38.99 |
+| Telemetry radio | 1 | £56.00 |
+| AIR 20A 3-4S Multi-Rotor UAV Drone ESC | 2 | £71.40 |
+| AIR 2216 motor | 2 | £18.79 |
+| Power splitter | 1 | £5.00 |
+| UBEC DC-DC buck converter | 1 | £10.00 |
+| EMAX Servo | 2 | £7.99 |
+| Carbon rod | 1 | £5.99 |
+| D1.2 rod | 4 | £1.25 |
+| 2300Ah battery | 1 | £20.75 |
+| PLA | – | £10.50 |
+| **Total (calculated from the table)** | | **£512.28** |

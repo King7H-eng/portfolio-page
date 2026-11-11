@@ -1,17 +1,17 @@
 ---
 // Leave `href` out to show a placeholder (no link, no file published).
-export interface Props { href?: string; title: string; meta: string; requestEmail?: string; }
-const { href, title, meta, requestEmail } = Astro.props;
+export interface Props { href?: string; title: string; meta: string; requestEmail?: string; kicker?: string; }
+const { href, title, meta, requestEmail, kicker = 'Full dissertation' } = Astro.props;
 const requestHref = requestEmail
   ? `mailto:${requestEmail}?subject=${encodeURIComponent(`Dissertation request: ${title}`)}`
   : null;
 const base = import.meta.env.BASE_URL;
 const url = href ? `${base}${href.replace(/^\//, '')}` : null;
 ---
-<aside class="pdf-card not-prose" aria-label="Full dissertation">
+<aside class="pdf-card not-prose" aria-label={kicker}>
   <div class="pdf-icon mono" aria-hidden="true">PDF</div>
   <div class="pdf-body">
-    <p class="pdf-kicker mono">Full dissertation</p>
+    <p class="pdf-kicker mono">{kicker}</p>
     <p class="pdf-title">{title}</p>
     <p class="pdf-meta mono">{meta}</p>
   </div>
