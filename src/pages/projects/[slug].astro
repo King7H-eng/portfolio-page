@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import { getCollection, render } from 'astro:content';
 import { PROJECT_ORDER } from '../../lib/projects';
+import { inlineHtml, plainText } from '../../lib/inline';
 
 export async function getStaticPaths() {
   const all = await getCollection('projects');
@@ -65,7 +66,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 <BaseLayout
   title={`${data.title} — Nicholas Mommsen`}
-  description={data.summary}
+  description={plainText(data.summary)}
   ogImage={data.ogImage || data.cover || undefined}
   ogType="article"
 >
@@ -109,10 +110,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
         {!data.showSummary ? null : data.abstract ? (
           <div class="project-abstract">
             <p class="abstract-label mono">Abstract</p>
-            <p class="project-summary">{data.abstract}</p>
+            <p class="project-summary" set:html={inlineHtml(data.abstract)} />
           </div>
         ) : (
-          <p class="project-summary">{data.summary}</p>
+          <p class="project-summary" set:html={inlineHtml(data.summary)} />
         )}
       </div>
     </header>
