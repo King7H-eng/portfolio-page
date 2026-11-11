@@ -46,10 +46,12 @@ figures:
 ---
 
 import PdfCard from '../../components/PdfCard.astro';
+import SystemDiagram from '../../components/evtol/SystemDiagram.astro';
+import FailureAnalysis from '../../components/evtol/FailureAnalysis.astro';
 
 ## About this project
 
-A five-person group project at Durham University to build a 3D-printed tail-sitter eVTOL drone, designed to take off vertically and cruise as a fixed-wing aircraft on autonomous wildlife-monitoring and anti-poaching patrols. The project covered the airframe build and the integration of the flight controller, power and navigation hardware, followed by flight testing and crash analysis. Autonomous patrol missions were scripted in Lua and tested in a Mission Planner simulation, and the project closed with a critical review of the design and recommendations for future development.
+A five-person group project at Durham University to build a 3D-printed tail-sitter eVTOL drone, designed to take off vertically and cruise as a fixed-wing aircraft on autonomous wildlife-monitoring and anti-poaching patrols. The project covered the airframe build and the integration of the flight controller, power and navigation hardware, followed by flight testing and crash analysis. Autonomous patrol missions were scripted in Lua and tested in a Mission Planner simulation, and the project closed with a critical review of the design and recommendations for future development. Ultimately, the drone failed to take off and land successfully in one piece.
 
 **My role:** Team leader and drone pilot. Through the project I became an A2 CofC qualified drone pilot.
 
@@ -74,17 +76,14 @@ Recommendations were made for improvements to both the design, and the build pro
 
 The total cost of the drone's components was £512.28.
 
-## Technical methods
+## System architecture
 
-| Method | How it was used |
-|---|---|
-| **3D printing** | Airframe printed in PLA from the Eclipson design and bonded with cyanoacrylate; carbon rods reinforce the fuselage and vertical stabiliser |
-| **Electronic design and power distribution** | LiPo battery feeding a power distribution board through a splitter; two ESCs regulating the motors; a buck converter powering the servo rail |
-| **Flight controller integration** | Holybro Pixhawk 6C Mini connected to the RC receiver, telemetry radio, GPS (over UART), ESCs and servos via PWM |
-| **ArduPilot** | ArduPlane firmware with VTOL enabled (Q_ENABLE) and tail-sitter parameters set for take-off, hover and transition |
-| **Mission Planner** | Ground control: calibration, flight modes, GPS waypoint missions, flight logging and simulation |
-| **Lua scripting** | Autonomous pre-arm checks, take-off, hover-to-fixed-wing (FBWA) transition, and lawnmower patrol passes between four waypoints in Kruger National Park, then return to home |
-| **Flight testing and crash analysis** | Ground checks in manual mode, two test flights, then diagnosis from flight footage and logs |
-| **Control tuning (planned)** | FFT vibration analysis to set notch filters, then Quik Tune and AutoTune for the PID gains |
-| **Test planning** | Proposed transition, efficiency and repeatability tests, with flight paths compared against the programmed route by RMS error |
+The drone's electronics were built around a power distribution board and a Pixhawk 6C Mini flight controller running ArduPlane. The autonomous missions were scripted in Lua and tested only in simulation.
 
+<SystemDiagram />
+
+## What went wrong, and why
+
+The drone never achieved a stable flight. Each failure was investigated from flight footage, logs and a critical review of the design, and the report sets out what was changed and what is recommended for a future iteration.
+
+<FailureAnalysis />

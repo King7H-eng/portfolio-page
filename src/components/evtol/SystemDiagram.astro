@@ -1,0 +1,116 @@
+---
+/**
+ * eVTOL power and signal architecture, drawn from the report's
+ * "Hardware Integration and Power Distribution" and "Flight Controller" sections.
+ * Nothing here goes beyond what the report describes.
+ */
+---
+
+<figure class="sysdiag not-prose">
+  <div class="sd-scroll" tabindex="0" aria-label="System diagram, scrolls sideways on small screens">
+    <svg viewBox="0 0 1000 440" role="img" aria-labelledby="sd-title sd-desc" class="sd-svg">
+      <title id="sd-title">eVTOL power and signal architecture</title>
+      <desc id="sd-desc">
+        The LiPo battery feeds a power splitter. The splitter powers the power distribution board and a buck
+        converter. The power distribution board powers two ESCs, which drive the two motors, and the flight
+        controller. The buck converter powers the servo rail for the two elevon servos. The Pixhawk 6C Mini flight
+        controller sends PWM signals to the ESCs and servos, and connects to the GPS over UART, the RC receiver and
+        the telemetry radio, which links to Mission Planner on the ground.
+      </desc>
+
+      <defs>
+        <marker id="sd-ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0 0L10 5L0 10z" class="sd-head-p" />
+        </marker>
+        <marker id="sd-as" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0 0L10 5L0 10z" class="sd-head-s" />
+        </marker>
+      </defs>
+
+      <!-- ── Power (solid) ── -->
+      <g class="sd-power">
+        <path d="M160 218 H200" marker-end="url(#sd-ap)" />
+        <path d="M330 205 H350 V138 H370" marker-end="url(#sd-ap)" />
+        <path d="M330 231 H350 V312 H370" marker-end="url(#sd-ap)" />
+        <path d="M510 124 H530 V52 H560" marker-end="url(#sd-ap)" />
+        <path d="M510 152 H545 V195 H560" marker-end="url(#sd-ap)" />
+        <path d="M720 52 H790" marker-end="url(#sd-ap)" />
+        <path d="M510 326 H525 V418 H870 V389" marker-end="url(#sd-ap)" />
+      </g>
+
+      <!-- ── Signals (dashed) ── -->
+      <g class="sd-signal">
+        <path d="M645 165 V76" marker-end="url(#sd-as)" />
+        <path d="M680 245 V367 H790" marker-end="url(#sd-as)" />
+        <path d="M790 142 H760 V182 H730" marker-end="url(#sd-as)" />
+        <path d="M790 207 H730" marker-end="url(#sd-as)" />
+        <path d="M730 228 H760 V272 H790" marker-end="url(#sd-as)" />
+      </g>
+
+      <!-- ── Boxes ── -->
+      <g class="sd-box"><rect x="30" y="190" width="130" height="56" rx="8" /><text x="95" y="214">LiPo battery</text><text x="95" y="232" class="sd-sub">main supply</text></g>
+      <g class="sd-box"><rect x="200" y="190" width="130" height="56" rx="8" /><text x="265" y="214">Power splitter</text><text x="265" y="232" class="sd-sub">DC supply</text></g>
+      <g class="sd-box"><rect x="370" y="110" width="140" height="56" rx="8" /><text x="440" y="134">Power module</text><text x="440" y="152" class="sd-sub">PDB · PM06</text></g>
+      <g class="sd-box"><rect x="370" y="290" width="140" height="56" rx="8" /><text x="440" y="314">Buck converter</text><text x="440" y="332" class="sd-sub">UBEC → servo rail</text></g>
+      <g class="sd-box"><rect x="560" y="24" width="160" height="52" rx="8" /><text x="640" y="47">ESC × 2</text><text x="640" y="64" class="sd-sub">motor speed</text></g>
+      <g class="sd-box"><rect x="790" y="24" width="170" height="52" rx="8" /><text x="875" y="47">Motor × 2</text><text x="875" y="64" class="sd-sub">AIR 2216, one per wing</text></g>
+      <g class="sd-box sd-fc"><rect x="560" y="165" width="170" height="80" rx="10" /><text x="645" y="196">Flight controller</text><text x="645" y="216" class="sd-sub">Pixhawk 6C Mini</text><text x="645" y="233" class="sd-sub">ArduPlane firmware</text></g>
+      <g class="sd-box"><rect x="790" y="120" width="170" height="44" rx="8" /><text x="875" y="147">GPS · UART</text></g>
+      <g class="sd-box"><rect x="790" y="185" width="170" height="44" rx="8" /><text x="875" y="212">RC receiver</text></g>
+      <g class="sd-box"><rect x="790" y="250" width="170" height="44" rx="8" /><text x="875" y="268">Telemetry radio</text><text x="875" y="284" class="sd-sub">↔ Mission Planner</text></g>
+      <g class="sd-box"><rect x="790" y="345" width="170" height="44" rx="8" /><text x="875" y="363">Servo × 2</text><text x="875" y="379" class="sd-sub">elevons</text></g>
+
+      <!-- ── Edge labels ── -->
+      <text x="652" y="125" class="sd-edge">PWM</text>
+      <text x="688" y="330" class="sd-edge">PWM</text>
+
+      <!-- ── Legend ── -->
+      <g class="sd-legend" transform="translate(30 30)">
+        <path d="M0 6 H34" class="sd-power-l" /><text x="44" y="10">Power</text>
+        <path d="M0 30 H34" class="sd-signal-l" /><text x="44" y="34">Signal / data</text>
+      </g>
+    </svg>
+  </div>
+  <figcaption class="sd-caption">
+    Power and signal architecture of the drone, as built. The flight controller sends PWM signals to the ESCs and
+    elevon servos, and exchanges data with the GPS, RC receiver and telemetry radio.
+  </figcaption>
+</figure>
+
+<style>
+  .sysdiag {
+    margin: var(--space-8) 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .sd-scroll { overflow-x: auto; padding: var(--space-6) var(--space-4) var(--space-2); }
+  .sd-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .sd-svg { display: block; width: 100%; height: auto; }
+  /* Phones: keep labels legible and let the diagram scroll sideways inside its frame */
+  @media (max-width: 640px) { .sd-svg { min-width: 680px; } }
+
+  .sd-box rect { fill: color-mix(in srgb, var(--text) 4%, transparent); stroke: var(--border-strong); stroke-width: 1.2; }
+  .sd-box text { fill: var(--text); font: 600 14px var(--font-sans, system-ui); text-anchor: middle; }
+  .sd-box text.sd-sub { fill: var(--text-muted); font: 400 11.5px var(--font-mono, ui-monospace); }
+  .sd-fc rect { stroke: var(--accent); stroke-width: 1.6; fill: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+  .sd-power path { fill: none; stroke: var(--cat-energy, #F5B544); stroke-width: 2; stroke-linejoin: round; }
+  .sd-signal path { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 5 5; stroke-linejoin: round; }
+  .sd-head-p { fill: var(--cat-energy, #F5B544); }
+  .sd-head-s { fill: var(--accent); }
+  .sd-edge { fill: var(--text-faint); font: 500 10.5px var(--font-mono, ui-monospace); letter-spacing: 0.06em; }
+
+  .sd-legend text { fill: var(--text-muted); font: 400 12px var(--font-mono, ui-monospace); }
+  .sd-power-l { stroke: var(--cat-energy, #F5B544); stroke-width: 2; }
+  .sd-signal-l { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 5 5; }
+
+  .sd-caption {
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
